@@ -42,7 +42,7 @@ fun AppTheme(
     doAllowDynamicColor: Boolean = false,
     content: @Composable () -> Unit,
 ) {
-    val colorScheme: ColorScheme = when {
+    val appColorScheme: ColorScheme = when {
         ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) && doAllowDynamicColor) -> {
             val context = LocalContext.current
             if (isDarkMode) {
@@ -60,15 +60,15 @@ fun AppTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
-            window.navigationBarColor = colorScheme.secondary.toArgb()
+            window.statusBarColor = appColorScheme.primary.toArgb()
+            window.navigationBarColor = appColorScheme.secondary.toArgb()
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !isDarkMode
         }
     }
 
     MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
-        content = content
+        colorScheme = appColorScheme,
+        typography = appTypography,
+        content = content,
     )
 }
