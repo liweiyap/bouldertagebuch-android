@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Bouldering Log</string>
+    <string name="title_main">Bouldering Log</string>
+    <string name="title_bubble_today_route_count">Routes</string>
 </resources>
