@@ -6,4 +6,6 @@ import androidx.compose.ui.unit.dp
 object AppDimensions {
     val mainScreenPadding: Dp = 16.dp
     val bubblePadding: Dp = 16.dp
+
+    val mainScreenArrangementSpacing: Dp = 16.dp
 }

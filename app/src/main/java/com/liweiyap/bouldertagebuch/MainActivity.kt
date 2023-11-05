@@ -3,6 +3,7 @@ package com.liweiyap.bouldertagebuch
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -35,6 +36,7 @@ private fun MainActivityComposable() {
         ) {
             Column(
                 modifier = Modifier.padding(AppDimensions.mainScreenPadding),
+                verticalArrangement = Arrangement.spacedBy(AppDimensions.mainScreenArrangementSpacing),
             ) {
                 Text(
                     text = stringResource(id = R.string.title_main),
