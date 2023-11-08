@@ -7,6 +7,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ButtonElevation
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,9 +28,10 @@ import com.liweiyap.bouldertagebuch.ui.theme.AppTheme
 fun CircularButton(
     size: Dp,
     text: String,
-    textStyle: TextStyle,
-    colors: ButtonColors,
-    onClick: () -> Unit,
+    textStyle: TextStyle = LocalTextStyle.current,
+    colors: ButtonColors = ButtonDefaults.buttonColors(),
+    elevation: ButtonElevation = ButtonDefaults.buttonElevation(),
+    onClick: () -> Unit = {},
 ) {
     Button(
         onClick = onClick,
@@ -37,6 +40,7 @@ fun CircularButton(
         modifier = Modifier
             .size(size = size),
         colors = colors,
+        elevation = elevation,
     ) {
         Text(
             text = text,

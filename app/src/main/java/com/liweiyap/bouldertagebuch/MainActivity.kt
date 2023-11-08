@@ -30,31 +30,31 @@ class MainActivity: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MainComposable()
+            AppTheme {
+                MainComposable()
+            }
         }
     }
 }
 
 @Composable
 private fun MainComposable() {
-    AppTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background,
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background,
+    ) {
+        Column(
+            modifier = Modifier.padding(AppDimensions.mainScreenPadding),
+            verticalArrangement = Arrangement.spacedBy(AppDimensions.mainScreenArrangementSpacing),
         ) {
-            Column(
-                modifier = Modifier.padding(AppDimensions.mainScreenPadding),
-                verticalArrangement = Arrangement.spacedBy(AppDimensions.mainScreenArrangementSpacing),
-            ) {
-                Text(
-                    text = stringResource(id = R.string.title_main),
-                    style = MaterialTheme.typography.titleLarge,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
+            Text(
+                text = stringResource(id = R.string.title_main),
+                style = MaterialTheme.typography.titleLarge,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
 
-                BubbleTodayRouteCount()
-            }
+            BubbleTodayRouteCount()
         }
     }
 }
@@ -86,28 +86,40 @@ private fun BubbleTodayRouteCount() {
 
             Spacer(modifier = Modifier.weight(1F))
 
-            CircularButton(
-                size = AppDimensions.todayRouteCountButtonSize,
+            BubbleTodayRouteCountButton(
                 text = stringResource(id = R.string.button_bubble_today_route_count_add),
-                textStyle = MaterialTheme.typography.bodyMedium,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.tertiary,
-                )
             ) {
             }
 
             Spacer(modifier = Modifier.width(AppDimensions.todayRouteCountButtonMargin))
 
-            CircularButton(
-                size = AppDimensions.todayRouteCountButtonSize,
+            BubbleTodayRouteCountButton(
                 text = stringResource(id = R.string.button_bubble_today_route_count_remove),
-                textStyle = MaterialTheme.typography.bodyMedium,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.tertiary,
-                )
             ) {
             }
         }
+    }
+}
+
+@Composable
+private fun BubbleTodayRouteCountButton(
+    text: String,
+    onClick: () -> Unit,
+) {
+    CircularButton(
+        size = AppDimensions.todayRouteCountButtonSize,
+        text = text,
+        textStyle = MaterialTheme.typography.bodyMedium,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.tertiary,
+        ),
+        elevation = ButtonDefaults.buttonElevation(
+            defaultElevation = AppDimensions.todayRouteCountButtonElevation,
+            pressedElevation = AppDimensions.todayRouteCountButtonElevation,
+            disabledElevation = AppDimensions.todayRouteCountButtonElevation,
+        ),
+    ) {
+        onClick()
     }
 }
 
@@ -115,5 +127,7 @@ private fun BubbleTodayRouteCount() {
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun MainActivityPreview() {
-    MainComposable()
+    AppTheme {
+        MainComposable()
+    }
 }

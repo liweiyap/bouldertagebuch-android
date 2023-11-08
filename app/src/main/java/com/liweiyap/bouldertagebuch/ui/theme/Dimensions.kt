@@ -13,4 +13,6 @@ object AppDimensions {
     val todayRouteCountButtonMargin: Dp = 8.dp
 
     val todayRouteCountButtonSize: Dp = 40.dp
+
+    val todayRouteCountButtonElevation: Dp = 1.dp
 }
