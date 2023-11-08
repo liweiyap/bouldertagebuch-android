@@ -1,5 +1,7 @@
 package com.liweiyap.bouldertagebuch.ui
 
+import android.content.res.Configuration
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -34,13 +36,15 @@ fun BubbleLayout(
     ) {
         Column (
             modifier = Modifier.padding(AppDimensions.bubblePadding),
+            verticalArrangement = Arrangement.spacedBy(AppDimensions.bubbleArrangementSpacing),
         ) {
             content()
         }
     }
 }
 
-@Preview
+@Preview(name = "Light Mode")
+@Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun BubbleLayoutPreview() {
     AppTheme {
@@ -48,6 +52,7 @@ private fun BubbleLayoutPreview() {
             Text(
                 text = stringResource(id = R.string.title_bubble_today_route_count),
                 style = MaterialTheme.typography.titleMedium,
+                maxLines = 1,
             )
         }
     }

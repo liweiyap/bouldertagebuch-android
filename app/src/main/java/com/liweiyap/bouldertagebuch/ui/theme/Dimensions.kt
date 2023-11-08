@@ -8,4 +8,9 @@ object AppDimensions {
     val bubblePadding: Dp = 16.dp
 
     val mainScreenArrangementSpacing: Dp = 16.dp
+    val bubbleArrangementSpacing: Dp = 16.dp
+
+    val todayRouteCountButtonMargin: Dp = 8.dp
+
+    val todayRouteCountButtonSize: Dp = 40.dp
 }
