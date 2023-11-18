@@ -26,6 +26,7 @@ private val appLightColorScheme = lightColorScheme(
     onBackground = AppColor.textLight,
     surface = AppColor.bubbleLight,
     onSurface = AppColor.textLight,
+    surfaceVariant = AppColor.buttonDisabledLight,
 )
 
 private val appDarkColorScheme = darkColorScheme(
@@ -38,6 +39,7 @@ private val appDarkColorScheme = darkColorScheme(
     onBackground = AppColor.textDark,
     surface = AppColor.bubbleDark,
     onSurface = AppColor.textDark,
+    surfaceVariant = AppColor.buttonDisabledDark,
 )
 
 @Composable

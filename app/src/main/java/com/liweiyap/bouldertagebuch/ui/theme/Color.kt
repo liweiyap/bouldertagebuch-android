@@ -11,6 +11,8 @@ object AppColor {
 
     val buttonLight: Color = Color(red = 252F/255F, green = 240F/255F, blue = 182F/255F)
     val buttonDark: Color = Color(red = 93F/255F, green = 88F/255F, blue = 59F/255F)
+    val buttonDisabledLight: Color = Color(red = 220F/255F, green = 220F/255F, blue = 220F/255F)
+    val buttonDisabledDark: Color = Color(red = 57F/255F, green = 57F/255F, blue = 61F/255F)
 
     val textLight: Color = Color(red = 1F/255F, green = 1F/255F, blue = 1F/255F)
     val textDark: Color = Color(red = 251F/255F, green = 250F/255F, blue = 255F/255F)

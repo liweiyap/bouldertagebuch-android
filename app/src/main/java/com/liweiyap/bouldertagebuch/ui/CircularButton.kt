@@ -31,6 +31,7 @@ fun CircularButton(
     textStyle: TextStyle = LocalTextStyle.current,
     colors: ButtonColors = ButtonDefaults.buttonColors(),
     elevation: ButtonElevation = ButtonDefaults.buttonElevation(),
+    isEnabled: Boolean = true,
     onClick: () -> Unit = {},
 ) {
     Button(
@@ -41,6 +42,7 @@ fun CircularButton(
             .size(size = size),
         colors = colors,
         elevation = elevation,
+        enabled = isEnabled,
     ) {
         Text(
             text = text,
@@ -53,7 +55,7 @@ fun CircularButton(
     }
 }
 
-@Preview(name = "Light Mode")
+@Preview(name = "Light Mode", showBackground = true)
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun CircularButtonPreview() {
@@ -64,7 +66,9 @@ private fun CircularButtonPreview() {
             textStyle = MaterialTheme.typography.bodyMedium,
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.tertiary,
-            )
+                disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+            ),
+            isEnabled = false,
         ) {
         }
     }

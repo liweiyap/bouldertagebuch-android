@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.liweiyap.bouldertagebuch.ui.BubbleLayout
 import com.liweiyap.bouldertagebuch.ui.CircularButton
 import com.liweiyap.bouldertagebuch.ui.theme.AppDimensions
@@ -60,7 +61,22 @@ private fun MainComposable() {
 }
 
 @Composable
-private fun BubbleTodayRouteCount() {
+private fun BubbleTodayRouteCount(
+    viewModel: MainViewModel = viewModel(),
+) {
+    BubbleTodayRouteCount(
+        todayRouteCount = viewModel.todayRouteCount,
+        onAddToCount = viewModel::addToCount,
+        onRemoveFromCount = viewModel::removeFromCount,
+    )
+}
+
+@Composable
+private fun BubbleTodayRouteCount(
+    todayRouteCount: Int,
+    onAddToCount: () -> Unit = {},
+    onRemoveFromCount: () -> Unit = {},
+) {
     BubbleLayout {
         Text(
             text = stringResource(id = R.string.title_bubble_today_route_count),
@@ -73,7 +89,7 @@ private fun BubbleTodayRouteCount() {
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = "0",
+                text = "$todayRouteCount",
                 style = MaterialTheme.typography.displayLarge,
                 maxLines = 1,
             )
@@ -89,13 +105,16 @@ private fun BubbleTodayRouteCount() {
             BubbleTodayRouteCountButton(
                 text = stringResource(id = R.string.button_bubble_today_route_count_add),
             ) {
+                onAddToCount()
             }
 
             Spacer(modifier = Modifier.width(AppDimensions.todayRouteCountButtonMargin))
 
             BubbleTodayRouteCountButton(
                 text = stringResource(id = R.string.button_bubble_today_route_count_remove),
+                isEnabled = (todayRouteCount > 0),
             ) {
+                onRemoveFromCount()
             }
         }
     }
@@ -104,7 +123,8 @@ private fun BubbleTodayRouteCount() {
 @Composable
 private fun BubbleTodayRouteCountButton(
     text: String,
-    onClick: () -> Unit,
+    isEnabled: Boolean = true,
+    onClick: () -> Unit = {},
 ) {
     CircularButton(
         size = AppDimensions.todayRouteCountButtonSize,
@@ -112,12 +132,14 @@ private fun BubbleTodayRouteCountButton(
         textStyle = MaterialTheme.typography.bodyMedium,
         colors = ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.tertiary,
+            disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
         ),
         elevation = ButtonDefaults.buttonElevation(
             defaultElevation = AppDimensions.todayRouteCountButtonElevation,
             pressedElevation = AppDimensions.todayRouteCountButtonElevation,
             disabledElevation = AppDimensions.todayRouteCountButtonElevation,
         ),
+        isEnabled = isEnabled,
     ) {
         onClick()
     }
