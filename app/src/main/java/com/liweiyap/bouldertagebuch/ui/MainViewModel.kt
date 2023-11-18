@@ -1,4 +1,4 @@
-package com.liweiyap.bouldertagebuch
+package com.liweiyap.bouldertagebuch.ui
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf

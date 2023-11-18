@@ -1,4 +1,4 @@
-package com.liweiyap.bouldertagebuch
+package com.liweiyap.bouldertagebuch.ui
 
 import android.content.res.Configuration
 import android.os.Bundle
@@ -22,8 +22,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.liweiyap.bouldertagebuch.ui.BubbleLayout
-import com.liweiyap.bouldertagebuch.ui.CircularButton
+import com.liweiyap.bouldertagebuch.R
+import com.liweiyap.bouldertagebuch.ui.components.BubbleLayout
+import com.liweiyap.bouldertagebuch.ui.components.CircularButton
 import com.liweiyap.bouldertagebuch.ui.theme.AppDimensions
 import com.liweiyap.bouldertagebuch.ui.theme.AppTheme
 

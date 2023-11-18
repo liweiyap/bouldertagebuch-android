@@ -1,4 +1,4 @@
-package com.liweiyap.bouldertagebuch.ui
+package com.liweiyap.bouldertagebuch.ui.components
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
