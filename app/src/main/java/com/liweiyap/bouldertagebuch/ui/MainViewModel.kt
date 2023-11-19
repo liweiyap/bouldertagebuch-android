@@ -1,20 +1,29 @@
 package com.liweiyap.bouldertagebuch.ui
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.liweiyap.bouldertagebuch.model.MainRepository
+import com.liweiyap.bouldertagebuch.utils.mutableStateIn
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MainViewModel: ViewModel() {
-    var todayRouteCount by mutableIntStateOf(0)
+@HiltViewModel
+class MainViewModel @Inject constructor(
+    private val repo: MainRepository,
+): ViewModel() {
+    private val _todayRouteCount: MutableStateFlow<Int> = repo.getTodayRouteCount().mutableStateIn(scope = viewModelScope, initialValue = 0)
+    val todayRouteCount = _todayRouteCount.asStateFlow()
 
-    fun addToCount() {
-        ++todayRouteCount
+    fun addToCount() = viewModelScope.launch {
+        repo.setTodayRouteCount(todayRouteCount.value.plus(1))
     }
 
-    fun removeFromCount() {
-        if (todayRouteCount > 0) {
-            --todayRouteCount
+    fun removeFromCount() = viewModelScope.launch {
+        if (todayRouteCount.value > 0) {
+            repo.setTodayRouteCount(todayRouteCount.value.minus(1))
         }
     }
 }

@@ -16,8 +16,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,7 +29,9 @@ import com.liweiyap.bouldertagebuch.ui.components.BubbleLayout
 import com.liweiyap.bouldertagebuch.ui.components.CircularButton
 import com.liweiyap.bouldertagebuch.ui.theme.AppDimensions
 import com.liweiyap.bouldertagebuch.ui.theme.AppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,11 +66,25 @@ private fun MainComposable() {
 }
 
 @Composable
+private fun BubbleTodayRouteCount() {
+    if (LocalInspectionMode.current) {
+        BubbleTodayRouteCount(
+            todayRouteCount = 0,
+        )
+    }
+    else {
+        BubbleTodayRouteCount(
+            viewModel = viewModel(),
+        )
+    }
+}
+
+@Composable
 private fun BubbleTodayRouteCount(
-    viewModel: MainViewModel = viewModel(),
+    viewModel: MainViewModel,
 ) {
     BubbleTodayRouteCount(
-        todayRouteCount = viewModel.todayRouteCount,
+        todayRouteCount = viewModel.todayRouteCount.collectAsState().value,
         onAddToCount = viewModel::addToCount,
         onRemoveFromCount = viewModel::removeFromCount,
     )

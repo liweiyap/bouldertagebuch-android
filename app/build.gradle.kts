@@ -1,6 +1,9 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.plugin.serialization")
+    id("com.google.dagger.hilt.android")
+    kotlin("kapt")
 }
 
 android {
@@ -49,18 +52,25 @@ android {
     }
 }
 
-val composeUIVersion: String = "1.5.4"
+val composeUIVersion: String by rootProject.extra
+val lifecycleVersion: String by rootProject.extra
+val hiltVersion: String by rootProject.extra
 
 dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
+    implementation("androidx.datastore:datastore:1.0.0")
     implementation("androidx.activity:activity-compose:1.8.1")
     implementation(platform("androidx.compose:compose-bom:2023.03.00"))
     implementation("androidx.compose.ui:ui:$composeUIVersion")
     implementation("androidx.compose.ui:ui-graphics:$composeUIVersion")
     implementation("androidx.compose.ui:ui-tooling-preview:$composeUIVersion")
     implementation("androidx.compose.material3:material3:1.1.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.1")
+    implementation("com.google.dagger:hilt-android:$hiltVersion")
+    kapt("com.google.dagger:hilt-android-compiler:$hiltVersion")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -68,4 +78,9 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:$composeUIVersion")
     debugImplementation("androidx.compose.ui:ui-tooling:$composeUIVersion")
     debugImplementation("androidx.compose.ui:ui-test-manifest:$composeUIVersion")
+}
+
+// Allow references to generated code
+kapt {
+    correctErrorTypes = true
 }
