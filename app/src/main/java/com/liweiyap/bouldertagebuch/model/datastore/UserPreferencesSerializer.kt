@@ -1,4 +1,4 @@
-package com.liweiyap.bouldertagebuch.model
+package com.liweiyap.bouldertagebuch.model.datastore
 
 import androidx.datastore.core.Serializer
 import kotlinx.serialization.SerializationException
