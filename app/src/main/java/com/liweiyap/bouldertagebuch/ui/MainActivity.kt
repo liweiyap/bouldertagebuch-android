@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
@@ -25,21 +24,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.liweiyap.bouldertagebuch.R
-import com.liweiyap.bouldertagebuch.model.Gym
 import com.liweiyap.bouldertagebuch.model.GymId
-import com.liweiyap.bouldertagebuch.model.gymRockerei
-import com.liweiyap.bouldertagebuch.model.gymVels
-import com.liweiyap.bouldertagebuch.ui.components.AppDialog
-import com.liweiyap.bouldertagebuch.ui.components.AppTextButton
 import com.liweiyap.bouldertagebuch.ui.components.AppTextButtonCircular
 import com.liweiyap.bouldertagebuch.ui.components.BubbleLayout
+import com.liweiyap.bouldertagebuch.ui.dialogs.DialogGymSelect
 import com.liweiyap.bouldertagebuch.ui.theme.AppDimensions
 import com.liweiyap.bouldertagebuch.ui.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -58,6 +50,24 @@ class MainActivity: ComponentActivity() {
 
 @Composable
 private fun MainComposable() {
+    var doShowGymSelectDialog: Boolean by rememberSaveable { mutableStateOf(false) }
+
+    MainComposable(
+        onRequestGymSelectDialog = { doShowGymSelectDialog = true },
+    )
+
+    if (doShowGymSelectDialog) {
+        DialogGymSelect(
+            onDismissRequest = { doShowGymSelectDialog = false },
+            viewModel = viewModel(),
+        )
+    }
+}
+
+@Composable
+private fun MainComposable(
+    onRequestGymSelectDialog: () -> Unit,
+) {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background,
@@ -73,16 +83,19 @@ private fun MainComposable() {
                 overflow = TextOverflow.Ellipsis,
             )
 
-            BubbleTodayRouteCount()
+            BubbleTodayRouteCount(
+                onRequestGymSelectDialog = onRequestGymSelectDialog,
+            )
         }
     }
 }
 
 @Composable
-private fun BubbleTodayRouteCount() {
+private fun BubbleTodayRouteCount(
+    onRequestGymSelectDialog: () -> Unit = {},
+) {
     if (LocalInspectionMode.current) {
         BubbleTodayRouteCount(
-            userDefinedGym = null,
             todayGymId = GymId.UNKNOWN,
             todayRouteCount = 0,
         )
@@ -90,6 +103,7 @@ private fun BubbleTodayRouteCount() {
     else {
         BubbleTodayRouteCount(
             viewModel = viewModel(),
+            onRequestGymSelectDialog = onRequestGymSelectDialog,
         )
     }
 }
@@ -97,28 +111,25 @@ private fun BubbleTodayRouteCount() {
 @Composable
 private fun BubbleTodayRouteCount(
     viewModel: MainViewModel,
+    onRequestGymSelectDialog: () -> Unit = {},
 ) {
     BubbleTodayRouteCount(
-        userDefinedGym = viewModel.userDefinedGym.collectAsState().value,
         todayGymId = viewModel.todayGymId.collectAsState().value,
         todayRouteCount = viewModel.todayRouteCount.collectAsState().value,
         onAddToCount = viewModel::addToCount,
         onRemoveFromCount = viewModel::removeFromCount,
-        onGymSelected = viewModel::setTodayGymId,
+        onRequestGymSelectDialog = onRequestGymSelectDialog,
     )
 }
 
 @Composable
 private fun BubbleTodayRouteCount(
-    userDefinedGym: Gym?,
     todayGymId: GymId,
     todayRouteCount: Int,
     onAddToCount: () -> Unit = {},
     onRemoveFromCount: () -> Unit = {},
-    onGymSelected:(GymId) -> Unit = {},
+    onRequestGymSelectDialog: () -> Unit = {},
 ) {
-    var doShowGymSelectDialog by rememberSaveable { mutableStateOf(false) }
-
     BubbleLayout {
         Text(
             text = stringResource(id = R.string.title_bubble_today_route_count),
@@ -148,7 +159,7 @@ private fun BubbleTodayRouteCount(
                 text = stringResource(id = R.string.button_bubble_today_route_count_add),
             ) {
                 if (todayRouteCount == 0) {
-                    doShowGymSelectDialog = true
+                    onRequestGymSelectDialog()
                 }
                 else {
                     onAddToCount()
@@ -164,14 +175,6 @@ private fun BubbleTodayRouteCount(
                 onRemoveFromCount()
             }
         }
-    }
-
-    if (doShowGymSelectDialog) {
-        DialogGymSelect(
-            onDismissRequest = { doShowGymSelectDialog = false },
-            userDefinedGym = userDefinedGym,
-            onGymSelected = onGymSelected,
-        )
     }
 }
 
@@ -192,63 +195,15 @@ private fun BubbleTodayRouteCountButton(
 }
 
 @Composable
-private fun DialogGymSelect(
+fun DialogGymSelect(
     onDismissRequest: () -> Unit,
-    userDefinedGym: Gym?,
-    onGymSelected:(GymId) -> Unit,
+    viewModel: MainViewModel,
 ) {
-    AppDialog(
+    DialogGymSelect(
         onDismissRequest = onDismissRequest,
-        title = stringResource(id = R.string.title_dialog_gym_select),
-    ) {
-        DialogGymSelectButton(
-            text = gymRockerei.name,
-            marginBottom = 8.dp,
-        ) {
-            onGymSelected(GymId.ROCKEREI)
-        }
-
-        DialogGymSelectButton(
-            text = gymVels.name,
-            marginBottom = 24.dp,
-        ) {
-            onGymSelected(GymId.VELS)
-        }
-
-        if (userDefinedGym == null) {
-            DialogGymSelectButton(
-                text = stringResource(id = R.string.button_dialog_gym_select_create_new).uppercase(),
-                fontWeight = FontWeight.Bold,
-            )
-        }
-        else {
-            DialogGymSelectButton(
-                text = userDefinedGym.name,
-            )
-        }
-    }
-}
-
-@Composable
-private fun DialogGymSelectButton(
-    text: String,
-    fontWeight: FontWeight = FontWeight.Normal,
-    marginBottom: Dp = 0.dp,
-    onGymSelected:() -> Unit = {},
-) {
-    AppTextButton(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = marginBottom),
-        text = text,
-        textStyle = MaterialTheme.typography.bodyMedium,
-        fontWeight = fontWeight,
-        maxLines = 2,
-        overflow = TextOverflow.Ellipsis,
-        shape = MaterialTheme.shapes.medium,
-    ) {
-        onGymSelected()
-    }
+        userDefinedGym = viewModel.userDefinedGym.collectAsState().value,
+        onGymSelected = viewModel::setTodayGymId,
+    )
 }
 
 @Preview(name = "Light Mode")
@@ -257,18 +212,5 @@ private fun DialogGymSelectButton(
 private fun MainActivityPreview() {
     AppTheme {
         MainComposable()
-    }
-}
-
-@Preview(name = "Light Mode", showBackground = true)
-@Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
-@Composable
-private fun DialogGymSelectionPreview() {
-    AppTheme {
-        DialogGymSelect(
-            onDismissRequest = {},
-            userDefinedGym = null,
-            onGymSelected = {},
-        )
     }
 }
