@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -34,8 +33,7 @@ fun AppDialog(
         ) {
             Column(
                 modifier = Modifier
-                    .padding(AppDimensions.dialogPadding)
-                    .verticalScroll(rememberScrollState()),
+                    .padding(AppDimensions.dialogPadding),
             ) {
                 Text(
                     modifier = Modifier.padding(bottom = AppDimensions.dialogTitleMarginBottom),
@@ -45,7 +43,17 @@ fun AppDialog(
                     overflow = TextOverflow.Ellipsis,
                 )
 
-                content()
+                Column(
+                    modifier = Modifier
+                        .verticalScrollWithScrollbar(
+                            state = rememberScrollState(),
+                            scrollbarConfig = ScrollBarConfig(
+                                doFade = false,
+                            )
+                        )
+                ) {
+                    content()
+                }
             }
         }
     }
