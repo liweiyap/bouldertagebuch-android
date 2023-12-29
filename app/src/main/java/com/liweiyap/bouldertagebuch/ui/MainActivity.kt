@@ -9,24 +9,37 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.liweiyap.bouldertagebuch.R
+import com.liweiyap.bouldertagebuch.model.Gym
+import com.liweiyap.bouldertagebuch.model.GymId
+import com.liweiyap.bouldertagebuch.model.gymRockerei
+import com.liweiyap.bouldertagebuch.model.gymVels
+import com.liweiyap.bouldertagebuch.ui.components.AppDialog
+import com.liweiyap.bouldertagebuch.ui.components.AppTextButton
+import com.liweiyap.bouldertagebuch.ui.components.AppTextButtonCircular
 import com.liweiyap.bouldertagebuch.ui.components.BubbleLayout
-import com.liweiyap.bouldertagebuch.ui.components.CircularButton
 import com.liweiyap.bouldertagebuch.ui.theme.AppDimensions
 import com.liweiyap.bouldertagebuch.ui.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -69,6 +82,8 @@ private fun MainComposable() {
 private fun BubbleTodayRouteCount() {
     if (LocalInspectionMode.current) {
         BubbleTodayRouteCount(
+            userDefinedGym = null,
+            todayGymId = GymId.UNKNOWN,
             todayRouteCount = 0,
         )
     }
@@ -84,18 +99,26 @@ private fun BubbleTodayRouteCount(
     viewModel: MainViewModel,
 ) {
     BubbleTodayRouteCount(
+        userDefinedGym = viewModel.userDefinedGym.collectAsState().value,
+        todayGymId = viewModel.todayGymId.collectAsState().value,
         todayRouteCount = viewModel.todayRouteCount.collectAsState().value,
         onAddToCount = viewModel::addToCount,
         onRemoveFromCount = viewModel::removeFromCount,
+        onGymSelected = viewModel::setTodayGymId,
     )
 }
 
 @Composable
 private fun BubbleTodayRouteCount(
+    userDefinedGym: Gym?,
+    todayGymId: GymId,
     todayRouteCount: Int,
     onAddToCount: () -> Unit = {},
     onRemoveFromCount: () -> Unit = {},
+    onGymSelected:(GymId) -> Unit = {},
 ) {
+    var doShowGymSelectDialog by rememberSaveable { mutableStateOf(false) }
+
     BubbleLayout {
         Text(
             text = stringResource(id = R.string.title_bubble_today_route_count),
@@ -124,7 +147,12 @@ private fun BubbleTodayRouteCount(
             BubbleTodayRouteCountButton(
                 text = stringResource(id = R.string.button_bubble_today_route_count_add),
             ) {
-                onAddToCount()
+                if (todayRouteCount == 0) {
+                    doShowGymSelectDialog = true
+                }
+                else {
+                    onAddToCount()
+                }
             }
 
             Spacer(modifier = Modifier.width(AppDimensions.todayRouteCountButtonMargin))
@@ -137,6 +165,14 @@ private fun BubbleTodayRouteCount(
             }
         }
     }
+
+    if (doShowGymSelectDialog) {
+        DialogGymSelect(
+            onDismissRequest = { doShowGymSelectDialog = false },
+            userDefinedGym = userDefinedGym,
+            onGymSelected = onGymSelected,
+        )
+    }
 }
 
 @Composable
@@ -145,22 +181,73 @@ private fun BubbleTodayRouteCountButton(
     isEnabled: Boolean = true,
     onClick: () -> Unit = {},
 ) {
-    CircularButton(
+    AppTextButtonCircular(
         size = AppDimensions.todayRouteCountButtonSize,
         text = text,
         textStyle = MaterialTheme.typography.bodyMedium,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.tertiary,
-            disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-        ),
-        elevation = ButtonDefaults.buttonElevation(
-            defaultElevation = AppDimensions.todayRouteCountButtonElevation,
-            pressedElevation = AppDimensions.todayRouteCountButtonElevation,
-            disabledElevation = AppDimensions.todayRouteCountButtonElevation,
-        ),
         isEnabled = isEnabled,
     ) {
         onClick()
+    }
+}
+
+@Composable
+private fun DialogGymSelect(
+    onDismissRequest: () -> Unit,
+    userDefinedGym: Gym?,
+    onGymSelected:(GymId) -> Unit,
+) {
+    AppDialog(
+        onDismissRequest = onDismissRequest,
+        title = stringResource(id = R.string.title_dialog_gym_select),
+    ) {
+        DialogGymSelectButton(
+            text = gymRockerei.name,
+            marginBottom = 8.dp,
+        ) {
+            onGymSelected(GymId.ROCKEREI)
+        }
+
+        DialogGymSelectButton(
+            text = gymVels.name,
+            marginBottom = 24.dp,
+        ) {
+            onGymSelected(GymId.VELS)
+        }
+
+        if (userDefinedGym == null) {
+            DialogGymSelectButton(
+                text = stringResource(id = R.string.button_dialog_gym_select_create_new).uppercase(),
+                fontWeight = FontWeight.Bold,
+            )
+        }
+        else {
+            DialogGymSelectButton(
+                text = userDefinedGym.name,
+            )
+        }
+    }
+}
+
+@Composable
+private fun DialogGymSelectButton(
+    text: String,
+    fontWeight: FontWeight = FontWeight.Normal,
+    marginBottom: Dp = 0.dp,
+    onGymSelected:() -> Unit = {},
+) {
+    AppTextButton(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = marginBottom),
+        text = text,
+        textStyle = MaterialTheme.typography.bodyMedium,
+        fontWeight = fontWeight,
+        maxLines = 2,
+        overflow = TextOverflow.Ellipsis,
+        shape = MaterialTheme.shapes.medium,
+    ) {
+        onGymSelected()
     }
 }
 
@@ -170,5 +257,18 @@ private fun BubbleTodayRouteCountButton(
 private fun MainActivityPreview() {
     AppTheme {
         MainComposable()
+    }
+}
+
+@Preview(name = "Light Mode", showBackground = true)
+@Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Composable
+private fun DialogGymSelectionPreview() {
+    AppTheme {
+        DialogGymSelect(
+            onDismissRequest = {},
+            userDefinedGym = null,
+            onGymSelected = {},
+        )
     }
 }

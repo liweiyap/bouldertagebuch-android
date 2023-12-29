@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Gym(
+    val id: GymId,
     val name: String,
     val routes: PersistentList<Difficulty>  /* immutable */,
 )
@@ -18,6 +19,7 @@ enum class GymId {
 }
 
 val gymRockerei: Gym = Gym(
+    id = GymId.ROCKEREI,
     name = "rockerei, Stuttgart",
     routes = persistentListOf(
         Difficulty(level = -1, colorName = "turquoise"),
@@ -32,6 +34,7 @@ val gymRockerei: Gym = Gym(
 )
 
 val gymVels: Gym = Gym(
+    id = GymId.VELS,
     name = "VELS, Stuttgart",
     routes = persistentListOf(
         Difficulty(level = -1, colorName = "turquoise"),

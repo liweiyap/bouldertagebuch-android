@@ -13,11 +13,9 @@ import kotlinx.serialization.encoding.Encoder
 @OptIn(ExperimentalSerializationApi::class)
 class PersistentMapSerializer(
     private val keySerializer: KSerializer<String>,
-    private val valueSerializer: KSerializer<UserPreferences>
-) : KSerializer<PersistentMap<String, UserPreferences>> {
-
-    private class PersistentMapDescriptor :
-        SerialDescriptor by serialDescriptor<Map<String, UserPreferences>>() {
+    private val valueSerializer: KSerializer<UserPreferences>,
+): KSerializer<PersistentMap<String, UserPreferences>> {
+    private class PersistentMapDescriptor: SerialDescriptor by serialDescriptor<Map<String, UserPreferences>>() {
         @ExperimentalSerializationApi
         override val serialName: String = "kotlinx.serialization.immutable.persistentMap"
     }

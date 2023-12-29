@@ -48,7 +48,7 @@ fun BubbleLayout(
 @Composable
 private fun BubbleLayoutPreview() {
     AppTheme {
-        BubbleLayout() {
+        BubbleLayout {
             Text(
                 text = stringResource(id = R.string.title_bubble_today_route_count),
                 style = MaterialTheme.typography.titleMedium,

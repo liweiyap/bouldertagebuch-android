@@ -3,6 +3,8 @@
     <string name="app_name">Bouldertagebuch</string>
     <string name="title_main">Bouldertagebuch</string>
     <string name="title_bubble_today_route_count">Heute</string>
+    <string name="title_dialog_gym_select">Halle auswählen</string>
     <string name="button_bubble_today_route_count_add">+</string>
     <string name="button_bubble_today_route_count_remove">-</string>
+    <string name="button_dialog_gym_select_create_new">Neuen Eintrag erstellen</string>
 </resources>
