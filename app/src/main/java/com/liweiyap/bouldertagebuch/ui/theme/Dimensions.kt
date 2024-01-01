@@ -13,7 +13,7 @@ object AppDimensions {
     val dialogDifficultySelectRouteImageSpacing: Dp = 4.dp
 
     val todayRouteCountButtonMargin: Dp = 8.dp
-    val dialogTitleMarginBottom: Dp = 16.dp
+    val dialogContentsMarginVertical: Dp = 16.dp
     val dialogDifficultySelectRouteMarginBottom: Dp = 8.dp
 
     val todayRouteCountButtonSize: Dp = 40.dp
@@ -24,4 +24,6 @@ object AppDimensions {
     val dialogDifficultySelectRouteImageBorderWidth: Dp = 1.dp
 
     val buttonElevation: Dp = 1.dp
+
+    const val dialogButtonPressedAlpha: Float = 0.5F
 }

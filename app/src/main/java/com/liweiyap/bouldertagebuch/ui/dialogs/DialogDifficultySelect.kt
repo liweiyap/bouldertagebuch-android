@@ -42,6 +42,7 @@ fun DialogDifficultySelect(
     AppDialog(
         onDismissRequest = onDismissRequest,
         title = stringResource(id = R.string.title_dialog_difficulty_select),
+        positiveButton = Pair(stringResource(id = R.string.button_dialog_positive_difficutly_select)) {},
     ) {
         val levels: ArrayList<ArrayList<Difficulty>> = remember(gym) {
             sortDifficultiesByLevel(gym)
