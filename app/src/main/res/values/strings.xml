@@ -4,7 +4,10 @@
     <string name="title_main">Bouldering Log</string>
     <string name="title_bubble_today_route_count">Today</string>
     <string name="title_dialog_gym_select">Select gym</string>
+    <string name="title_dialog_difficulty_select">Select difficulty</string>
     <string name="button_bubble_today_route_count_add">+</string>
     <string name="button_bubble_today_route_count_remove">-</string>
     <string name="button_dialog_gym_select_create_new">Create new entry</string>
+    <string name="difficulty_special_event_tooltip">Special events, e.g. competitions</string>
+    <string name="difficulty_tooltip_prefix">Grade:\u0020</string>
 </resources>

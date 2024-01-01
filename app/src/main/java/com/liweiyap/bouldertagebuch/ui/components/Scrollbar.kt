@@ -75,8 +75,8 @@ fun Modifier.scrollbar(
             )
 
             // added by LWY
-            val doShowScrollbar: Boolean = (indicatorLength >= viewPortLength)
-            if (doShowScrollbar) return@drawWithContent
+            val doShowScrollbar: Boolean = (indicatorLength < viewPortLength)
+            if (!doShowScrollbar) return@drawWithContent
 
             val indicatorThicknessPx: Float = indicatorThickness.toPx()
 

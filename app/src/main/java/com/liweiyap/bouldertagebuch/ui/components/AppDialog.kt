@@ -1,6 +1,7 @@
 package com.liweiyap.bouldertagebuch.ui.components
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.rememberScrollState
@@ -9,6 +10,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.Hyphens
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.window.Dialog
 import com.liweiyap.bouldertagebuch.ui.theme.AppDimensions
@@ -38,13 +40,16 @@ fun AppDialog(
                 Text(
                     modifier = Modifier.padding(bottom = AppDimensions.dialogTitleMarginBottom),
                     text = title,
-                    style = MaterialTheme.typography.titleLarge,
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        hyphens = Hyphens.Auto
+                    ),
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                 )
 
                 Column(
                     modifier = Modifier
+                        .fillMaxWidth()
                         .verticalScrollWithScrollbar(
                             state = rememberScrollState(),
                             scrollbarConfig = ScrollBarConfig(

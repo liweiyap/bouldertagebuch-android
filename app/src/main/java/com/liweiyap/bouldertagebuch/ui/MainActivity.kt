@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -28,9 +29,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.liweiyap.bouldertagebuch.R
+import com.liweiyap.bouldertagebuch.model.Gym
 import com.liweiyap.bouldertagebuch.model.GymId
+import com.liweiyap.bouldertagebuch.model.gymRockerei
+import com.liweiyap.bouldertagebuch.model.gymVels
 import com.liweiyap.bouldertagebuch.ui.components.AppTextButtonCircular
 import com.liweiyap.bouldertagebuch.ui.components.BubbleLayout
+import com.liweiyap.bouldertagebuch.ui.dialogs.DialogDifficultySelect
 import com.liweiyap.bouldertagebuch.ui.dialogs.DialogGymSelect
 import com.liweiyap.bouldertagebuch.ui.theme.AppDimensions
 import com.liweiyap.bouldertagebuch.ui.theme.AppTheme
@@ -51,6 +56,7 @@ class MainActivity: ComponentActivity() {
 @Composable
 private fun MainComposable() {
     var doShowGymSelectDialog: Boolean by rememberSaveable { mutableStateOf(false) }
+    var doShowDifficultySelectDialog: Boolean by rememberSaveable { mutableStateOf(false) }
 
     MainComposable(
         onRequestGymSelectDialog = { doShowGymSelectDialog = true },
@@ -59,6 +65,14 @@ private fun MainComposable() {
     if (doShowGymSelectDialog) {
         DialogGymSelect(
             onDismissRequest = { doShowGymSelectDialog = false },
+            viewModel = viewModel(),
+            onRequestDifficultySelectDialog = { doShowDifficultySelectDialog = true }
+        )
+    }
+
+    if (doShowDifficultySelectDialog) {
+        DialogDifficultySelect(
+            onDismissRequest = { doShowDifficultySelectDialog = false },
             viewModel = viewModel(),
         )
     }
@@ -198,12 +212,42 @@ private fun BubbleTodayRouteCountButton(
 fun DialogGymSelect(
     onDismissRequest: () -> Unit,
     viewModel: MainViewModel,
+    onRequestDifficultySelectDialog: () -> Unit,
 ) {
     DialogGymSelect(
         onDismissRequest = onDismissRequest,
         userDefinedGym = viewModel.userDefinedGym.collectAsState().value,
         onGymSelected = viewModel::setTodayGymId,
+        onRequestDifficultySelectDialog = onRequestDifficultySelectDialog,
     )
+}
+
+@Composable
+fun DialogDifficultySelect(
+    onDismissRequest: () -> Unit,
+    viewModel: MainViewModel,
+) {
+    val gymId: GymId by viewModel.todayGymId.collectAsState()
+    val userDefinedGym: Gym? by viewModel.userDefinedGym.collectAsState()
+
+    val gym: Gym? = remember(gymId, userDefinedGym) {
+        when (gymId) {
+            gymRockerei.id -> gymRockerei
+            gymVels.id -> gymVels
+            userDefinedGym?.id -> userDefinedGym
+            else -> null
+        }
+    }
+
+    if (gym == null) {
+        onDismissRequest()
+    }
+    else {
+        DialogDifficultySelect(
+            onDismissRequest = onDismissRequest,
+            gym = gym,
+        )
+    }
 }
 
 @Preview(name = "Light Mode")

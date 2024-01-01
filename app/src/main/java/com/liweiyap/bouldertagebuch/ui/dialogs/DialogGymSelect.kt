@@ -23,9 +23,10 @@ import com.liweiyap.bouldertagebuch.ui.theme.AppTheme
 
 @Composable
 fun DialogGymSelect(
-    onDismissRequest: () -> Unit,
-    userDefinedGym: Gym?,
-    onGymSelected:(GymId) -> Unit,
+    onDismissRequest: () -> Unit = {},
+    userDefinedGym: Gym? = null,
+    onGymSelected:(GymId) -> Unit = {},
+    onRequestDifficultySelectDialog: () -> Unit = {},
 ) {
     AppDialog(
         onDismissRequest = onDismissRequest,
@@ -37,6 +38,7 @@ fun DialogGymSelect(
         ) {
             onGymSelected(gymRockerei.id)
             onDismissRequest()
+            onRequestDifficultySelectDialog()
         }
 
         DialogGymSelectButton(
@@ -44,6 +46,7 @@ fun DialogGymSelect(
         ) {
             onGymSelected(gymVels.id)
             onDismissRequest()
+            onRequestDifficultySelectDialog()
         }
 
         if (userDefinedGym == null) {
@@ -88,12 +91,8 @@ private fun DialogGymSelectButton(
 @Preview(name = "Light Mode", showBackground = true)
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
-private fun DialogGymSelectionPreview() {
+private fun DialogGymSelectPreview() {
     AppTheme {
-        DialogGymSelect(
-            onDismissRequest = {},
-            userDefinedGym = null,
-            onGymSelected = {},
-        )
+        DialogGymSelect()
     }
 }

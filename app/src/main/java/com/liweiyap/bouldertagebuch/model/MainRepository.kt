@@ -52,8 +52,8 @@ class MainRepository @Inject constructor(
     companion object {
         private fun initTodayRouteList(gymId: GymId): ArrayList<Int> {
             val size: Int = when (gymId) {
-                gymRockerei.id -> gymRockerei.routes.size
-                gymVels.id -> gymVels.routes.size
+                gymRockerei.id -> gymRockerei.difficulties.size
+                gymVels.id -> gymVels.difficulties.size
                 else -> 0
             }
 

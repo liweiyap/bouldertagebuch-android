@@ -10,14 +10,18 @@ object AppDimensions {
 
     val mainScreenArrangementSpacing: Dp = 16.dp
     val bubbleArrangementSpacing: Dp = 16.dp
+    val dialogDifficultySelectRouteImageSpacing: Dp = 4.dp
 
     val todayRouteCountButtonMargin: Dp = 8.dp
     val dialogTitleMarginBottom: Dp = 16.dp
+    val dialogDifficultySelectRouteMarginBottom: Dp = 8.dp
 
     val todayRouteCountButtonSize: Dp = 40.dp
+    val dialogDifficultySelectRouteImageSize: Dp = 40.dp
 
     val dialogMinWidth: Dp = 280.dp
     val dialogMaxWidth: Dp = 560.dp
+    val dialogDifficultySelectRouteImageBorderWidth: Dp = 1.dp
 
     val buttonElevation: Dp = 1.dp
 }

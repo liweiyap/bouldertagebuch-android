@@ -54,4 +54,8 @@ object AppColor {
             else -> Color.Transparent
         }
     }
+
+    fun getBorderColorFromRouteColorName(isSystemInDarkTheme: Boolean): Color {
+        return if (isSystemInDarkTheme) routeWhiteDark else routeBlackLight
+    }
 }
