@@ -3,7 +3,7 @@ package com.liweiyap.bouldertagebuch
 import com.liweiyap.bouldertagebuch.model.Difficulty
 import com.liweiyap.bouldertagebuch.model.gymRockerei
 import com.liweiyap.bouldertagebuch.model.gymVels
-import com.liweiyap.bouldertagebuch.ui.dialogs.sortDifficultiesByLevel
+import com.liweiyap.bouldertagebuch.ui.routes.sortDifficultiesByLevel
 import org.junit.Test
 
 import org.junit.Assert.*

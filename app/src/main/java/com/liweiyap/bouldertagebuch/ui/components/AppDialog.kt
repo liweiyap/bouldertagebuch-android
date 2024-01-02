@@ -56,7 +56,9 @@ fun AppDialog(
                     text = title,
                 )
 
-                AppDialogContent {
+                AppDialogContent(
+                    modifier = Modifier.weight(weight = 1F, fill = false),
+                ) {
                     content()
                 }
 
@@ -85,10 +87,11 @@ private fun AppDialogTitle(
 
 @Composable
 private fun AppDialogContent(
+    modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .verticalScrollWithScrollbar(
                 state = rememberScrollState(),
