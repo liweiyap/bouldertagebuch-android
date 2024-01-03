@@ -20,5 +20,5 @@ data class UserPreferences(
     val gym2: Gym? = null,
 
     @Serializable(with = PersistentMapSerializer::class)
-    val log: PersistentMap<LocalDate, Pair<GymId, ArrayList<Int>>> = persistentMapOf(),
+    val log: PersistentMap<LocalDate, Pair<GymId, List<Int>>> = persistentMapOf(),
 )

@@ -72,16 +72,22 @@ import java.util.Collections
 fun DialogDifficultySelect(
     onDismissRequest: () -> Unit = {},
     gym: Gym,
-    todayRouteCount: ArrayList<Int>,
+    todayRouteCount: List<Int>,
+    onPositiveButtonClicked: (List<Int>) -> Unit = {},
 ) {
     // we don't want to trigger recomposition of all rows when the value of only one row changes
     @SuppressLint("MutableCollectionMutableState")
-    val todayRouteCountCopyState: MutableState<ArrayList<Int>> = rememberSaveable { mutableStateOf(todayRouteCount) }
+    val todayRouteCountCopyState: MutableState<ArrayList<Int>> = rememberSaveable {
+        mutableStateOf(ArrayList(todayRouteCount))
+    }
 
     AppDialog(
         onDismissRequest = onDismissRequest,
         title = stringResource(id = R.string.title_dialog_difficulty_select),
-        positiveButton = Pair(stringResource(id = R.string.button_dialog_positive_difficutly_select)) {},
+        positiveButton = Pair(stringResource(id = R.string.button_dialog_positive_difficutly_select)) {
+            onPositiveButtonClicked(todayRouteCountCopyState.value)
+            onDismissRequest()
+        },
     ) {
         Row {
             val levels: ArrayList<ArrayList<Difficulty>> = remember(gym) {
@@ -301,7 +307,7 @@ private fun DifficultyArrow(
 @Composable
 private fun DialogDifficultySelectRouteCountEditor(
     index: Int,
-    todayRouteCount: ArrayList<Int>,
+    todayRouteCount: List<Int>,
     todayRouteCountCopyState: MutableState<ArrayList<Int>>,
 ) {
     var routeCount: Int by rememberSaveable { mutableIntStateOf(todayRouteCount[index]) }

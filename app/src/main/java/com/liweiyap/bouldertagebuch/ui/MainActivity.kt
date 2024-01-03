@@ -140,7 +140,7 @@ private fun BubbleTodayRouteCount(
 @Composable
 private fun BubbleTodayRouteCount(
     todayGymId: GymId,
-    todayRouteCount: ArrayList<Int>,
+    todayRouteCount: List<Int>,
     onAddToCount: () -> Unit = {},
     onRemoveFromCount: () -> Unit = {},
     onRequestGymSelectDialog: () -> Unit = {},
@@ -254,6 +254,7 @@ fun DialogDifficultySelect(
             onDismissRequest = onDismissRequest,
             gym = gym,
             todayRouteCount = viewModel.todayRouteCount.collectAsState().value,
+            onPositiveButtonClicked = viewModel::setTodayRouteCount,
         )
     }
 }

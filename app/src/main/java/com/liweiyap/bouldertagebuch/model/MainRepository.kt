@@ -35,22 +35,25 @@ class MainRepository @Inject constructor(
         }
     }
 
-    suspend fun setTodayRouteCount(count: Int) {
+    suspend fun setTodayRouteCount(count: List<Int>) {
         context.dataStore.updateData { userPrefs: UserPreferences ->
             userPrefs.copy(
-                log = userPrefs.log.put(getDate(), Pair(GymId.UNKNOWN, arrayListOf(count)))
+                log = if (count.sum() == 0)
+                    userPrefs.log.remove(getDate())
+                else
+                    userPrefs.log.put(getDate(), Pair(userPrefs.log[getDate()]!!.first, count))
             )
         }
     }
 
-    fun getTodayRouteCount(): Flow<ArrayList<Int>> {
+    fun getTodayRouteCount(): Flow<List<Int>> {
         return context.dataStore.data.map { userPrefs: UserPreferences ->
             userPrefs.log[getDate()]?.second ?: arrayListOf()
         }
     }
 
     companion object {
-        private fun initTodayRouteList(gymId: GymId): ArrayList<Int> {
+        private fun initTodayRouteList(gymId: GymId): List<Int> {
             val size: Int = when (gymId) {
                 gymRockerei.id -> gymRockerei.getDifficultiesSortedByLevel().size
                 gymVels.id -> gymVels.getDifficultiesSortedByLevel().size
