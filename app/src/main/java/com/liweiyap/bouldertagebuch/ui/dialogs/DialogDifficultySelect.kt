@@ -3,11 +3,8 @@ package com.liweiyap.bouldertagebuch.ui.dialogs
 import android.annotation.SuppressLint
 import android.content.res.Configuration
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -17,10 +14,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.PlainTooltipBox
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -34,7 +29,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -60,6 +54,7 @@ import com.liweiyap.bouldertagebuch.model.Gym
 import com.liweiyap.bouldertagebuch.model.gymVels
 import com.liweiyap.bouldertagebuch.ui.components.AppDialog
 import com.liweiyap.bouldertagebuch.ui.components.AppTextButtonCircular
+import com.liweiyap.bouldertagebuch.ui.components.DifficultyColorIndicatorWithTooltip
 import com.liweiyap.bouldertagebuch.ui.components.ScrollBarConfig
 import com.liweiyap.bouldertagebuch.ui.components.horizontalScrollWithScrollbar
 import com.liweiyap.bouldertagebuch.ui.theme.AppColor
@@ -71,7 +66,7 @@ import java.util.Collections
 @Composable
 fun DialogDifficultySelect(
     onDismissRequest: () -> Unit = {},
-    gym: Gym,
+    gym: Gym?,
     todayRouteCount: List<Int>,
     onPositiveButtonClicked: (List<Int>) -> Unit = {},
 ) {
@@ -89,6 +84,17 @@ fun DialogDifficultySelect(
             onDismissRequest()
         },
     ) {
+        if (gym == null) {
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .size(AppDimensions.dialogDifficultySelectProgressIndicatorSize),
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                trackColor = MaterialTheme.colorScheme.tertiary,
+            )
+
+            return@AppDialog
+        }
+
         Row {
             val levels: ArrayList<ArrayList<Difficulty>> = remember(gym) {
                 gym.getDifficultiesSortedByLevel()
@@ -153,7 +159,10 @@ fun DialogDifficultySelect(
                             ),
                         ) {
                             for (difficulty in level) {
-                                DifficultyColorIndicatorWithTooltip(difficulty = difficulty)
+                                DifficultyColorIndicatorWithTooltip(
+                                    difficulty = difficulty,
+                                    size = AppDimensions.dialogDifficultySelectRouteImageSize,
+                                )
                             }
                         }
 
@@ -169,60 +178,6 @@ fun DialogDifficultySelect(
             }
         }
     }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun DifficultyColorIndicatorWithTooltip(
-    difficulty: Difficulty,
-) {
-    if ((difficulty.level >= 0) && difficulty.grade.isBlank()) {
-        DifficultyColorIndicator(
-            difficulty = difficulty,
-        )
-    }
-    else {
-        PlainTooltipBox(
-            tooltip = {
-                Text(
-                    if (difficulty.level == -1)
-                        stringResource(id = R.string.difficulty_special_event_tooltip)
-                    else
-                        stringResource(id = R.string.difficulty_tooltip_prefix) + difficulty.grade
-                )
-            },
-        ) {
-            DifficultyColorIndicator(
-                difficulty = difficulty,
-                modifier = Modifier.tooltipAnchor(),
-            )
-        }
-    }
-}
-
-@Composable
-private fun DifficultyColorIndicator(
-    difficulty: Difficulty,
-    modifier: Modifier = Modifier,
-) {
-    Box(
-        modifier = modifier
-            .size(AppDimensions.dialogDifficultySelectRouteImageSize)
-            .clip(shape = CircleShape)
-            .background(
-                color = AppColor.translateRouteColorName(
-                    difficulty.colorName,
-                    isSystemInDarkTheme()
-                )
-            )
-            .border(
-                width = AppDimensions.dialogDifficultySelectRouteImageBorderWidth,
-                color = AppColor.getBorderColorFromRouteColorName(
-                    isSystemInDarkTheme()
-                ),
-                shape = CircleShape,
-            )
-    )
 }
 
 @Composable

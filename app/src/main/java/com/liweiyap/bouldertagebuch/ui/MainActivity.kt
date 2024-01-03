@@ -16,7 +16,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -183,15 +182,9 @@ private fun BubbleTodayRouteCount(
 
             Spacer(modifier = Modifier.width(AppDimensions.todayRouteCountButtonMargin))
 
-            val isRemoveButtonEnabled: Boolean by remember {
-                derivedStateOf {
-                    todayRouteCount.sum() > 0
-                }
-            }
-
             BubbleTodayRouteCountButton(
                 text = stringResource(id = R.string.button_route_count_remove),
-                isEnabled = isRemoveButtonEnabled,
+                isEnabled = (todayRouteCount.sum() > 0),
             ) {
                 onRemoveFromCount()
             }
@@ -246,17 +239,12 @@ fun DialogDifficultySelect(
         }
     }
 
-    if (gym == null) {
-        onDismissRequest()
-    }
-    else {
-        DialogDifficultySelect(
-            onDismissRequest = onDismissRequest,
-            gym = gym,
-            todayRouteCount = viewModel.todayRouteCount.collectAsState().value,
-            onPositiveButtonClicked = viewModel::setTodayRouteCount,
-        )
-    }
+    DialogDifficultySelect(
+        onDismissRequest = onDismissRequest,
+        gym = gym,
+        todayRouteCount = viewModel.todayRouteCount.collectAsState().value,
+        onPositiveButtonClicked = viewModel::setTodayRouteCount,
+    )
 }
 
 @Preview(name = "Light Mode")

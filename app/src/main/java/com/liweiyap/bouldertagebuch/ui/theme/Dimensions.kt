@@ -20,10 +20,11 @@ object AppDimensions {
     val todayRouteCountButtonSize: Dp = 40.dp
     val dialogDifficultySelectRouteImageSize: Dp = 40.dp
     val dialogDifficultySelectRouteCountButtonSize: Dp = 40.dp
+    val dialogDifficultySelectProgressIndicatorSize: Dp = 64.dp
 
     val dialogMinWidth: Dp = 280.dp
     val dialogMaxWidth: Dp = 560.dp
-    val dialogDifficultySelectRouteImageBorderWidth: Dp = 1.dp
+    val difficultyColorIndicatorBorderWidth: Dp = 1.dp
     val dialogDifficultyArrowLayoutWidth: Dp = 32.dp
     const val dialogDifficultyArrowStrokeWidth: Float = 8F
 
