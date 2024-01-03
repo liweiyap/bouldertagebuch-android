@@ -70,14 +70,13 @@ import java.util.Collections
 
 @Composable
 fun DialogDifficultySelect(
-    onDismissRequest: () -> Unit,
+    onDismissRequest: () -> Unit = {},
     gym: Gym,
     todayRouteCount: ArrayList<Int>,
 ) {
     // we don't want to trigger recomposition of all rows when the value of only one row changes
-    val todayRouteCountCopy: ArrayList<Int> = remember { todayRouteCount }
     @SuppressLint("MutableCollectionMutableState")
-    val todayRouteCountCopyState: MutableState<ArrayList<Int>> = rememberSaveable { mutableStateOf(todayRouteCountCopy) }
+    val todayRouteCountCopyState: MutableState<ArrayList<Int>> = rememberSaveable { mutableStateOf(todayRouteCount) }
 
     AppDialog(
         onDismissRequest = onDismissRequest,
@@ -390,7 +389,6 @@ fun canCalculateExpertLevelOffset(
 private fun DialogDifficultySelectPreview() {
     AppTheme {
         DialogDifficultySelect(
-            onDismissRequest = {},
             gym = gymVels,
             todayRouteCount = ArrayList(Collections.nCopies(gymVels.getDifficultiesSortedByLevel().size, 0)),
         )
