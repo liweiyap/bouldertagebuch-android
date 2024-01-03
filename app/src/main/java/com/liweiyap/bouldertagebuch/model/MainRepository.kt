@@ -43,17 +43,17 @@ class MainRepository @Inject constructor(
         }
     }
 
-    fun getTodayRouteCount(): Flow<Int> {
+    fun getTodayRouteCount(): Flow<ArrayList<Int>> {
         return context.dataStore.data.map { userPrefs: UserPreferences ->
-            userPrefs.log[getDate()]?.second?.sum() ?: 0
+            userPrefs.log[getDate()]?.second ?: arrayListOf()
         }
     }
 
     companion object {
         private fun initTodayRouteList(gymId: GymId): ArrayList<Int> {
             val size: Int = when (gymId) {
-                gymRockerei.id -> gymRockerei.difficulties.size
-                gymVels.id -> gymVels.difficulties.size
+                gymRockerei.id -> gymRockerei.getDifficultiesSortedByLevel().size
+                gymVels.id -> gymVels.getDifficultiesSortedByLevel().size
                 else -> 0
             }
 

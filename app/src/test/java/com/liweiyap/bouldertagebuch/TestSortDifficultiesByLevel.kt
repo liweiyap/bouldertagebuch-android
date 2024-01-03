@@ -3,7 +3,6 @@ package com.liweiyap.bouldertagebuch
 import com.liweiyap.bouldertagebuch.model.Difficulty
 import com.liweiyap.bouldertagebuch.model.gymRockerei
 import com.liweiyap.bouldertagebuch.model.gymVels
-import com.liweiyap.bouldertagebuch.ui.routes.sortDifficultiesByLevel
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -11,7 +10,7 @@ import org.junit.Assert.*
 class TestSortDifficultiesByLevel {
     @Test
     fun testSortRockereiDifficultiesByLevel() {
-        val levels: ArrayList<ArrayList<Difficulty>> = sortDifficultiesByLevel(gymRockerei)
+        val levels: ArrayList<ArrayList<Difficulty>> = gymRockerei.getDifficultiesSortedByLevel()
         assertEquals(levels.size, 8)
 
         assertEquals(levels[0].size, 1)
@@ -41,7 +40,7 @@ class TestSortDifficultiesByLevel {
 
     @Test
     fun testSortVelsDifficultiesByLevel() {
-        val levels: ArrayList<ArrayList<Difficulty>> = sortDifficultiesByLevel(gymVels)
+        val levels: ArrayList<ArrayList<Difficulty>> = gymVels.getDifficultiesSortedByLevel()
         assertEquals(levels.size, 8)
 
         assertEquals(levels[0].size, 1)

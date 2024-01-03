@@ -1,5 +1,6 @@
 package com.liweiyap.bouldertagebuch.ui.dialogs
 
+import android.annotation.SuppressLint
 import android.content.res.Configuration
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -21,10 +23,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PlainTooltipBox
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,9 +59,9 @@ import com.liweiyap.bouldertagebuch.model.Difficulty
 import com.liweiyap.bouldertagebuch.model.Gym
 import com.liweiyap.bouldertagebuch.model.gymVels
 import com.liweiyap.bouldertagebuch.ui.components.AppDialog
+import com.liweiyap.bouldertagebuch.ui.components.AppTextButtonCircular
 import com.liweiyap.bouldertagebuch.ui.components.ScrollBarConfig
 import com.liweiyap.bouldertagebuch.ui.components.horizontalScrollWithScrollbar
-import com.liweiyap.bouldertagebuch.ui.routes.sortDifficultiesByLevel
 import com.liweiyap.bouldertagebuch.ui.theme.AppColor
 import com.liweiyap.bouldertagebuch.ui.theme.AppDimensions
 import com.liweiyap.bouldertagebuch.ui.theme.AppTheme
@@ -66,7 +72,13 @@ import java.util.Collections
 fun DialogDifficultySelect(
     onDismissRequest: () -> Unit,
     gym: Gym,
+    todayRouteCount: ArrayList<Int>,
 ) {
+    // we don't want to trigger recomposition of all rows when the value of only one row changes
+    val todayRouteCountCopy: ArrayList<Int> = remember { todayRouteCount }
+    @SuppressLint("MutableCollectionMutableState")
+    val todayRouteCountCopyState: MutableState<ArrayList<Int>> = rememberSaveable { mutableStateOf(todayRouteCountCopy) }
+
     AppDialog(
         onDismissRequest = onDismissRequest,
         title = stringResource(id = R.string.title_dialog_difficulty_select),
@@ -74,7 +86,7 @@ fun DialogDifficultySelect(
     ) {
         Row {
             val levels: ArrayList<ArrayList<Difficulty>> = remember(gym) {
-                sortDifficultiesByLevel(gym)
+                gym.getDifficultiesSortedByLevel()
             }
 
             val comparator: Comparator<ArrayList<Difficulty>> = remember(levels) {
@@ -124,6 +136,7 @@ fun DialogDifficultySelect(
                                     expertLevelOffsetY = coordinates.positionInParent().y + coordinates.size.height
                                 }
                             },
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Row(
                             modifier = Modifier.width(
@@ -138,6 +151,14 @@ fun DialogDifficultySelect(
                                 DifficultyColorIndicatorWithTooltip(difficulty = difficulty)
                             }
                         }
+
+                        Spacer(modifier = Modifier.weight(1F))
+
+                        DialogDifficultySelectRouteCountEditor(
+                            index = index,
+                            todayRouteCount = todayRouteCount,
+                            todayRouteCountCopyState = todayRouteCountCopyState,
+                        )
                     }
                 }
             }
@@ -278,6 +299,62 @@ private fun DifficultyArrow(
     }
 }
 
+@Composable
+private fun DialogDifficultySelectRouteCountEditor(
+    index: Int,
+    todayRouteCount: ArrayList<Int>,
+    todayRouteCountCopyState: MutableState<ArrayList<Int>>,
+) {
+    var routeCount: Int by rememberSaveable { mutableIntStateOf(todayRouteCount[index]) }
+
+    DialogDifficultySelectRouteCountButton(
+        text = stringResource(id = R.string.button_route_count_add),
+    ) {
+        ++routeCount
+        ++todayRouteCountCopyState.value[index]
+    }
+
+    Text(
+        text = routeCount.toString(),
+        style = MaterialTheme.typography.displayMedium,
+        maxLines = 1,
+        modifier = Modifier.padding(
+            start = AppDimensions.dialogDifficultySelectRouteCountButtonMargin,
+            end = AppDimensions.dialogDifficultySelectRouteCountButtonMargin,
+        )
+    )
+
+    val isRemoveButtonEnabled: Boolean by remember {
+        derivedStateOf {
+            routeCount > 0
+        }
+    }
+
+    DialogDifficultySelectRouteCountButton(
+        text = stringResource(id = R.string.button_route_count_remove),
+        isEnabled = isRemoveButtonEnabled,
+    ) {
+        --routeCount
+        --todayRouteCountCopyState.value[index]
+    }
+}
+
+@Composable
+private fun DialogDifficultySelectRouteCountButton(
+    text: String,
+    isEnabled: Boolean = true,
+    onClick: () -> Unit = {},
+) {
+    AppTextButtonCircular(
+        size = AppDimensions.dialogDifficultySelectRouteCountButtonSize,
+        text = text,
+        textStyle = MaterialTheme.typography.bodyMedium,
+        isEnabled = isEnabled,
+    ) {
+        onClick()
+    }
+}
+
 fun canCalculateLevelOffsets(
     index: Int,
     levelCount: Int,
@@ -315,6 +392,7 @@ private fun DialogDifficultySelectPreview() {
         DialogDifficultySelect(
             onDismissRequest = {},
             gym = gymVels,
+            todayRouteCount = ArrayList(Collections.nCopies(gymVels.getDifficultiesSortedByLevel().size, 0)),
         )
     }
 }

@@ -26,6 +26,7 @@ private fun getBaseTextStyle(fontSize: TextUnit): TextStyle {
 
 val appTypography = Typography(
     displayLarge = getBaseTextStyle(fontSize = 40.sp),
+    displayMedium = getBaseTextStyle(fontSize = 30.sp),
     titleLarge = getBaseTextStyle(fontSize = 22.sp),
     titleMedium = getBaseTextStyle(fontSize = 17.sp),
     bodyMedium = getBaseTextStyle(fontSize = 17.sp),

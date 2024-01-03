@@ -22,20 +22,10 @@ class MainViewModel @Inject constructor(
     private val _todayGymId: MutableStateFlow<GymId> = repo.getTodayGymId().mutableStateIn(scope = viewModelScope, initialValue = GymId.UNKNOWN)
     val todayGymId = _todayGymId.asStateFlow()
 
-    private val _todayRouteCount: MutableStateFlow<Int> = repo.getTodayRouteCount().mutableStateIn(scope = viewModelScope, initialValue = 0)
+    private val _todayRouteCount: MutableStateFlow<ArrayList<Int>> = repo.getTodayRouteCount().mutableStateIn(scope = viewModelScope, initialValue = arrayListOf())
     val todayRouteCount = _todayRouteCount.asStateFlow()
 
     fun setTodayGymId(id: GymId) = viewModelScope.launch {
         repo.setTodayGymId(id)
-    }
-
-    fun addToCount() = viewModelScope.launch {
-        repo.setTodayRouteCount(todayRouteCount.value.plus(1))
-    }
-
-    fun removeFromCount() = viewModelScope.launch {
-        if (todayRouteCount.value > 0) {
-            repo.setTodayRouteCount(todayRouteCount.value.minus(1))
-        }
     }
 }

@@ -98,7 +98,7 @@ private fun AppTextButtonCircularPreview() {
     AppTheme {
         AppTextButtonCircular(
             size = AppDimensions.todayRouteCountButtonSize,
-            text = stringResource(id = R.string.button_bubble_today_route_count_add),
+            text = stringResource(id = R.string.button_route_count_add),
             textStyle = MaterialTheme.typography.bodyMedium,
             isEnabled = false,
         ) {

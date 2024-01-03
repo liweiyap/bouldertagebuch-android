@@ -9,7 +9,27 @@ data class Gym(
     val id: GymId,
     val name: String,
     val difficulties: PersistentList<Difficulty>  /* immutable */,
-)
+) {
+    fun getDifficultiesSortedByLevel(): ArrayList<ArrayList<Difficulty>> {
+        val levels: ArrayList<ArrayList<Difficulty>> = arrayListOf()
+
+        for (difficulty in difficulties) {
+            if (levels.isEmpty()) {
+                levels.add(arrayListOf(difficulty))
+                continue
+            }
+
+            if (levels.last().last().level == difficulty.level) {
+                levels.last().add(difficulty)
+                continue
+            }
+
+            levels.add(arrayListOf(difficulty))
+        }
+
+        return levels
+    }
+}
 
 enum class GymId {
     ROCKEREI,

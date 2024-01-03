@@ -7,7 +7,6 @@ import com.liweiyap.bouldertagebuch.model.gymRockerei
 import com.liweiyap.bouldertagebuch.model.gymVels
 import com.liweiyap.bouldertagebuch.ui.dialogs.canCalculateBeginnerLevelOffset
 import com.liweiyap.bouldertagebuch.ui.dialogs.canCalculateExpertLevelOffset
-import com.liweiyap.bouldertagebuch.ui.routes.sortDifficultiesByLevel
 import kotlinx.collections.immutable.persistentListOf
 import org.junit.Test
 
@@ -16,7 +15,7 @@ import org.junit.Assert.*
 class TestDialogDifficultySelectLevelOffsets {
     @Test
     fun testCalculateGym0LevelOffsets() {
-        val levels: ArrayList<ArrayList<Difficulty>> = sortDifficultiesByLevel(gymTest0)
+        val levels: ArrayList<ArrayList<Difficulty>> = gymTest0.getDifficultiesSortedByLevel()
         assertEquals(levels.size, 1)
 
         val index = 0
@@ -28,7 +27,7 @@ class TestDialogDifficultySelectLevelOffsets {
 
     @Test
     fun testCalculateGym1LevelOffsets() {
-        val levels: ArrayList<ArrayList<Difficulty>> = sortDifficultiesByLevel(gymTest1)
+        val levels: ArrayList<ArrayList<Difficulty>> = gymTest1.getDifficultiesSortedByLevel()
         assertEquals(levels.size, 1)
 
         val index = 0
@@ -40,7 +39,7 @@ class TestDialogDifficultySelectLevelOffsets {
 
     @Test
     fun testCalculateGym2LevelOffsets() {
-        val levels: ArrayList<ArrayList<Difficulty>> = sortDifficultiesByLevel(gymTest2)
+        val levels: ArrayList<ArrayList<Difficulty>> = gymTest2.getDifficultiesSortedByLevel()
         assertEquals(levels.size, 2)
 
         var index = 0
@@ -56,7 +55,7 @@ class TestDialogDifficultySelectLevelOffsets {
 
     @Test
     fun testCalculateGym3LevelOffsets() {
-        val levels: ArrayList<ArrayList<Difficulty>> = sortDifficultiesByLevel(gymTest3)
+        val levels: ArrayList<ArrayList<Difficulty>> = gymTest3.getDifficultiesSortedByLevel()
         assertEquals(levels.size, 3)
 
         var index = 0
@@ -76,7 +75,7 @@ class TestDialogDifficultySelectLevelOffsets {
 
     @Test
     fun testCalculateGym4LevelOffsets() {
-        val levels: ArrayList<ArrayList<Difficulty>> = sortDifficultiesByLevel(gymTest4)
+        val levels: ArrayList<ArrayList<Difficulty>> = gymTest4.getDifficultiesSortedByLevel()
         assertEquals(levels.size, 2)
 
         var index = 0
@@ -92,7 +91,7 @@ class TestDialogDifficultySelectLevelOffsets {
 
     @Test
     fun testCalculateRockereiLevelOffsets() {
-        val levels: ArrayList<ArrayList<Difficulty>> = sortDifficultiesByLevel(gymRockerei)
+        val levels: ArrayList<ArrayList<Difficulty>> = gymRockerei.getDifficultiesSortedByLevel()
         assertEquals(levels.size, 8)
 
         var index = 0
@@ -132,7 +131,7 @@ class TestDialogDifficultySelectLevelOffsets {
 
     @Test
     fun testCalculateVelsLevelOffsets() {
-        val levels: ArrayList<ArrayList<Difficulty>> = sortDifficultiesByLevel(gymVels)
+        val levels: ArrayList<ArrayList<Difficulty>> = gymVels.getDifficultiesSortedByLevel()
         assertEquals(levels.size, 8)
 
         var index = 0

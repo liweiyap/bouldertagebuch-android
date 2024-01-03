@@ -15,9 +15,11 @@ object AppDimensions {
     val todayRouteCountButtonMargin: Dp = 8.dp
     val dialogContentsMarginVertical: Dp = 16.dp
     val dialogDifficultySelectRouteMarginBottom: Dp = 8.dp
+    val dialogDifficultySelectRouteCountButtonMargin: Dp = 8.dp
 
     val todayRouteCountButtonSize: Dp = 40.dp
     val dialogDifficultySelectRouteImageSize: Dp = 40.dp
+    val dialogDifficultySelectRouteCountButtonSize: Dp = 40.dp
 
     val dialogMinWidth: Dp = 280.dp
     val dialogMaxWidth: Dp = 560.dp

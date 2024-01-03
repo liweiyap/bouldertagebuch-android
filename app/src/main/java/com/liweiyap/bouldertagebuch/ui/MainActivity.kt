@@ -16,6 +16,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -111,7 +112,7 @@ private fun BubbleTodayRouteCount(
     if (LocalInspectionMode.current) {
         BubbleTodayRouteCount(
             todayGymId = GymId.UNKNOWN,
-            todayRouteCount = 0,
+            todayRouteCount = arrayListOf(),
         )
     }
     else {
@@ -130,8 +131,8 @@ private fun BubbleTodayRouteCount(
     BubbleTodayRouteCount(
         todayGymId = viewModel.todayGymId.collectAsState().value,
         todayRouteCount = viewModel.todayRouteCount.collectAsState().value,
-        onAddToCount = viewModel::addToCount,
-        onRemoveFromCount = viewModel::removeFromCount,
+        onAddToCount = {},
+        onRemoveFromCount = {},
         onRequestGymSelectDialog = onRequestGymSelectDialog,
     )
 }
@@ -139,7 +140,7 @@ private fun BubbleTodayRouteCount(
 @Composable
 private fun BubbleTodayRouteCount(
     todayGymId: GymId,
-    todayRouteCount: Int,
+    todayRouteCount: ArrayList<Int>,
     onAddToCount: () -> Unit = {},
     onRemoveFromCount: () -> Unit = {},
     onRequestGymSelectDialog: () -> Unit = {},
@@ -156,7 +157,7 @@ private fun BubbleTodayRouteCount(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = "$todayRouteCount",
+                text = "${todayRouteCount.sum()}",
                 style = MaterialTheme.typography.displayLarge,
                 maxLines = 1,
             )
@@ -170,9 +171,9 @@ private fun BubbleTodayRouteCount(
             Spacer(modifier = Modifier.weight(1F))
 
             BubbleTodayRouteCountButton(
-                text = stringResource(id = R.string.button_bubble_today_route_count_add),
+                text = stringResource(id = R.string.button_route_count_add),
             ) {
-                if (todayRouteCount == 0) {
+                if (todayRouteCount.sum() == 0) {
                     onRequestGymSelectDialog()
                 }
                 else {
@@ -182,9 +183,15 @@ private fun BubbleTodayRouteCount(
 
             Spacer(modifier = Modifier.width(AppDimensions.todayRouteCountButtonMargin))
 
+            val isRemoveButtonEnabled: Boolean by remember {
+                derivedStateOf {
+                    todayRouteCount.sum() > 0
+                }
+            }
+
             BubbleTodayRouteCountButton(
-                text = stringResource(id = R.string.button_bubble_today_route_count_remove),
-                isEnabled = (todayRouteCount > 0),
+                text = stringResource(id = R.string.button_route_count_remove),
+                isEnabled = isRemoveButtonEnabled,
             ) {
                 onRemoveFromCount()
             }
@@ -246,6 +253,7 @@ fun DialogDifficultySelect(
         DialogDifficultySelect(
             onDismissRequest = onDismissRequest,
             gym = gym,
+            todayRouteCount = viewModel.todayRouteCount.collectAsState().value,
         )
     }
 }
