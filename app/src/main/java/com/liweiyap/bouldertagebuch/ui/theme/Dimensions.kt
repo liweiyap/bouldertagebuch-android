@@ -23,7 +23,7 @@ object AppDimensions {
     val dialogMaxWidth: Dp = 560.dp
     val dialogDifficultySelectRouteImageBorderWidth: Dp = 1.dp
     val dialogDifficultyArrowLayoutWidth: Dp = 32.dp
-    val dialogDifficultyArrowStrokeWidth: Float = 8F
+    const val dialogDifficultyArrowStrokeWidth: Float = 8F
 
     val buttonElevation: Dp = 1.dp
 

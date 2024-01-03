@@ -42,8 +42,10 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import com.liweiyap.bouldertagebuch.R
@@ -203,6 +205,7 @@ private fun DifficultyArrow(
     expertLevelOffsetY: Float,
 ) {
     val beginnerLevelOffsetYDp = with(LocalDensity.current) { beginnerLevelOffsetY.toDp() }
+    val expertLevelOffsetYDp = with(LocalDensity.current) { expertLevelOffsetY.toDp() }
 
     Text(
         text = stringResource(id = R.string.difficulty_arrow_label),
@@ -211,7 +214,12 @@ private fun DifficultyArrow(
         modifier = Modifier
             .vertical()
             .rotate(-90F)
-            .offset(x = -beginnerLevelOffsetYDp)
+            .offset(
+                x = if (LocalLayoutDirection.current == LayoutDirection.Ltr)
+                    -(expertLevelOffsetYDp - beginnerLevelOffsetYDp) / 2
+                else
+                    (expertLevelOffsetYDp - beginnerLevelOffsetYDp) / 2
+            )
             .horizontalScrollWithScrollbar(
                 state = rememberScrollState(),
                 scrollbarConfig = ScrollBarConfig(
