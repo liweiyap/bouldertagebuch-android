@@ -6,9 +6,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
@@ -29,17 +32,20 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.liweiyap.bouldertagebuch.R
+import com.liweiyap.bouldertagebuch.model.Difficulty
 import com.liweiyap.bouldertagebuch.model.Gym
 import com.liweiyap.bouldertagebuch.model.GymId
 import com.liweiyap.bouldertagebuch.model.gymRockerei
 import com.liweiyap.bouldertagebuch.model.gymVels
 import com.liweiyap.bouldertagebuch.ui.components.AppTextButtonCircular
 import com.liweiyap.bouldertagebuch.ui.components.BubbleLayout
+import com.liweiyap.bouldertagebuch.ui.components.DifficultyColorIndicator
 import com.liweiyap.bouldertagebuch.ui.dialogs.DialogDifficultySelect
 import com.liweiyap.bouldertagebuch.ui.dialogs.DialogGymSelect
 import com.liweiyap.bouldertagebuch.ui.theme.AppDimensions
 import com.liweiyap.bouldertagebuch.ui.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Collections
 
 @AndroidEntryPoint
 class MainActivity: ComponentActivity() {
@@ -110,8 +116,8 @@ private fun BubbleTodayRouteCount(
 ) {
     if (LocalInspectionMode.current) {
         BubbleTodayRouteCount(
-            todayGymId = GymId.UNKNOWN,
-            todayRouteCount = arrayListOf(),
+            todayGymId = GymId.VELS,
+            todayRouteCount = ArrayList(Collections.nCopies(gymVels.getDifficultiesSortedByLevel().size, 1)),
         )
     }
     else {
@@ -130,6 +136,7 @@ private fun BubbleTodayRouteCount(
     BubbleTodayRouteCount(
         todayGymId = viewModel.todayGymId.collectAsState().value,
         todayRouteCount = viewModel.todayRouteCount.collectAsState().value,
+        userDefinedGym = viewModel.userDefinedGym.collectAsState().value,
         onAddToCount = {},
         onRemoveFromCount = {},
         onRequestGymSelectDialog = onRequestGymSelectDialog,
@@ -140,15 +147,29 @@ private fun BubbleTodayRouteCount(
 private fun BubbleTodayRouteCount(
     todayGymId: GymId,
     todayRouteCount: List<Int>,
+    userDefinedGym: Gym? = null,
     onAddToCount: () -> Unit = {},
     onRemoveFromCount: () -> Unit = {},
     onRequestGymSelectDialog: () -> Unit = {},
 ) {
+    val todayGym: Gym? = remember(todayGymId, userDefinedGym) {
+        when (todayGymId) {
+            gymRockerei.id -> gymRockerei
+            gymVels.id -> gymVels
+            userDefinedGym?.id -> userDefinedGym
+            else -> null
+        }
+    }
+
     BubbleLayout {
         Text(
-            text = stringResource(id = R.string.title_bubble_today_route_count),
+            text = stringResource(id = R.string.title_bubble_today_route_count) + (if (todayGym == null)
+                ""
+            else
+                " (${todayGym.name})"
+            ),
             style = MaterialTheme.typography.titleMedium,
-            maxLines = 1,
+            maxLines = 2,
             overflow = TextOverflow.Ellipsis,
         )
 
@@ -189,6 +210,65 @@ private fun BubbleTodayRouteCount(
                 onRemoveFromCount()
             }
         }
+
+        if ((todayGym != null) && (todayRouteCount.sum() > 0)) {
+            BubbleTodayRouteCountFlow(
+                todayGym = todayGym,
+                todayRouteCount = todayRouteCount,
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun BubbleTodayRouteCountFlow(
+    todayGym: Gym,
+    todayRouteCount: List<Int>,
+) {
+    FlowRow(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(AppDimensions.todayRouteCountFlowSpacing),
+    ) {
+        val levels: ArrayList<ArrayList<Difficulty>> = remember(todayGym) {
+            todayGym.getDifficultiesSortedByLevel()
+        }
+
+        for ((index, level) in levels.withIndex()) {
+            BubbleTodayRouteCountFlowItem(
+                index = index,
+                level = level,
+                todayRouteCount = todayRouteCount,
+            )
+        }
+    }
+}
+
+@Composable
+private fun BubbleTodayRouteCountFlowItem(
+    index: Int,
+    level: ArrayList<Difficulty>,
+    todayRouteCount: List<Int>,
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(AppDimensions.todayRouteCountFlowItemSpacing),
+        ) {
+            for (difficulty in level) {
+                DifficultyColorIndicator(
+                    difficulty = difficulty,
+                    size = AppDimensions.todayRouteCountFlowItemSize,
+                )
+            }
+        }
+
+        Text(
+            text = todayRouteCount[index].toString(),
+            style = MaterialTheme.typography.bodyMedium,
+            maxLines = 1,
+        )
     }
 }
 
