@@ -12,5 +12,6 @@
     <string name="button_dialog_positive_difficulty_select">DONE</string>
     <string name="difficulty_special_event_tooltip">Special events, e.g. competitions</string>
     <string name="difficulty_tooltip_prefix">Grade:\u0020</string>
+    <string name="difficulty_tooltip_hint">* Long-press a colour to show tooltip (if available)</string>
     <string name="difficulty_arrow_label">harder</string>
 </resources>

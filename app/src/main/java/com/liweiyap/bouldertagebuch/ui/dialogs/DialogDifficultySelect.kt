@@ -39,6 +39,7 @@ import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -116,6 +117,12 @@ fun DialogDifficultySelect(
                 }
             }
 
+            val hasTooltip: Boolean = remember(gym) {
+                gym.difficulties.any { difficulty ->
+                    (difficulty.level == -1) || ((difficulty.level >= 0) && (difficulty.grade.isNotBlank()))
+                }
+            }
+
             if (doShowDifficultyArrow) {
                 DifficultyArrow(beginnerLevelOffsetY, expertLevelOffsetY)
             }
@@ -168,6 +175,14 @@ fun DialogDifficultySelect(
                             onRouteCountDecreased = onRouteCountDecreased,
                         )
                     }
+                }
+
+                if (hasTooltip) {
+                    Text(
+                        text = stringResource(id = R.string.difficulty_tooltip_hint),
+                        style = MaterialTheme.typography.bodySmall.copy(fontStyle = FontStyle.Italic),
+                        modifier = Modifier.padding(top = AppDimensions.dialogDifficultySelectRouteMarginBottom),
+                    )
                 }
             }
         }

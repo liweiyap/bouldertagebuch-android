@@ -12,5 +12,6 @@
     <string name="button_dialog_positive_difficulty_select">FERTIG</string>
     <string name="difficulty_special_event_tooltip">Sonderveranstaltungen, z.B. Wettkämpfe</string>
     <string name="difficulty_tooltip_prefix">Stufe:\u0020</string>
+    <string name="difficulty_tooltip_hint">* Auf Farbe lang gedrückt halten, um Kurzinfo anzuzeigen (falls verfügbar)</string>
     <string name="difficulty_arrow_label">schwerer</string>
 </resources>
