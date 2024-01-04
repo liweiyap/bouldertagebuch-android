@@ -7,6 +7,7 @@
     <string name="title_dialog_difficulty_select">Select difficulty</string>
     <string name="button_route_count_add">+</string>
     <string name="button_route_count_remove">-</string>
+    <string name="button_navigate_history">Show history</string>
     <string name="button_dialog_gym_select_create_new">Create new entry</string>
     <string name="button_dialog_positive_default">OK</string>
     <string name="button_dialog_positive_difficulty_select">DONE</string>

@@ -68,6 +68,8 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics:$composeUIVersion")
     implementation("androidx.compose.ui:ui-tooling-preview:$composeUIVersion")
     implementation("androidx.compose.material3:material3:1.1.2")
+    implementation("androidx.navigation:navigation-compose:2.7.6")
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.1")
     implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.6")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.5.0")

@@ -31,6 +31,8 @@ object AppDimensions {
     val difficultyColorIndicatorBorderWidth: Dp = 1.dp
     val dialogDifficultyArrowLayoutWidth: Dp = 32.dp
     const val dialogDifficultyArrowStrokeWidth: Float = 8F
+    val navigateToHistoryButtonMinWidth: Dp = 280.dp
+    val navigateToHistoryButtonMaxWidth: Dp = 560.dp
 
     val buttonElevation: Dp = 1.dp
 

@@ -17,6 +17,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -47,7 +48,10 @@ import androidx.compose.ui.unit.max
 import com.liweiyap.bouldertagebuch.R
 import com.liweiyap.bouldertagebuch.model.Difficulty
 import com.liweiyap.bouldertagebuch.model.Gym
+import com.liweiyap.bouldertagebuch.model.GymId
+import com.liweiyap.bouldertagebuch.model.gymRockerei
 import com.liweiyap.bouldertagebuch.model.gymVels
+import com.liweiyap.bouldertagebuch.ui.MainViewModel
 import com.liweiyap.bouldertagebuch.ui.components.AppDialog
 import com.liweiyap.bouldertagebuch.ui.components.AppTextButtonCircular
 import com.liweiyap.bouldertagebuch.ui.components.DifficultyColorIndicatorWithTooltip
@@ -58,6 +62,33 @@ import com.liweiyap.bouldertagebuch.ui.theme.AppDimensions
 import com.liweiyap.bouldertagebuch.ui.theme.AppTheme
 import com.liweiyap.bouldertagebuch.utils.vertical
 import java.util.Collections
+
+@Composable
+fun DialogDifficultySelect(
+    onDismissRequest: () -> Unit,
+    viewModel: MainViewModel,
+) {
+    val gymId: GymId by viewModel.todayGymId.collectAsState()
+    val userDefinedGym: Gym? by viewModel.userDefinedGym.collectAsState()
+
+    val gym: Gym? = remember(gymId, userDefinedGym) {
+        when (gymId) {
+            gymRockerei.id -> gymRockerei
+            gymVels.id -> gymVels
+            userDefinedGym?.id -> userDefinedGym
+            else -> null
+        }
+    }
+
+    DialogDifficultySelect(
+        onDismissRequest = onDismissRequest,
+        gym = gym,
+        todayRouteCount = viewModel.todayRouteCount.collectAsState().value,
+        onRouteCountIncreased = viewModel::increaseTodayRouteCount,
+        onRouteCountDecreased = viewModel::decreaseTodayRouteCount,
+        onRouteCountZero = viewModel::clearTodayRouteCount,
+    )
+}
 
 @Composable
 fun DialogDifficultySelect(

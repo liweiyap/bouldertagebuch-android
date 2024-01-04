@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -17,9 +18,24 @@ import com.liweiyap.bouldertagebuch.model.Gym
 import com.liweiyap.bouldertagebuch.model.GymId
 import com.liweiyap.bouldertagebuch.model.gymRockerei
 import com.liweiyap.bouldertagebuch.model.gymVels
+import com.liweiyap.bouldertagebuch.ui.MainViewModel
 import com.liweiyap.bouldertagebuch.ui.components.AppDialog
 import com.liweiyap.bouldertagebuch.ui.components.AppTextButton
 import com.liweiyap.bouldertagebuch.ui.theme.AppTheme
+
+@Composable
+fun DialogGymSelect(
+    onDismissRequest: () -> Unit,
+    viewModel: MainViewModel,
+    onRequestDifficultySelectDialog: () -> Unit,
+) {
+    DialogGymSelect(
+        onDismissRequest = onDismissRequest,
+        userDefinedGym = viewModel.userDefinedGym.collectAsState().value,
+        onGymSelected = viewModel::setTodayGymId,
+        onRequestDifficultySelectDialog = onRequestDifficultySelectDialog,
+    )
+}
 
 @Composable
 fun DialogGymSelect(
