@@ -99,15 +99,19 @@ fun DialogDifficultySelect(
     onRouteCountDecreased: (Int) -> Unit = {},
     onRouteCountZero: () -> Unit = {},
 ) {
-    AppDialog(
-        onDismissRequest = onDismissRequest,
-        title = stringResource(id = R.string.title_dialog_difficulty_select),
-        positiveButton = Pair(stringResource(id = R.string.button_dialog_positive_difficulty_select)) {
+    val onPositiveButtonAction = remember(todayRouteCount) {
+        {
             if (todayRouteCount.sum() == 0) {
                 onRouteCountZero()
             }
             onDismissRequest()
-        },
+        }
+    }
+
+    AppDialog(
+        onDismissRequest = onPositiveButtonAction,
+        title = stringResource(id = R.string.title_dialog_difficulty_select),
+        positiveButton = Pair(stringResource(id = R.string.button_dialog_positive_difficulty_select), onPositiveButtonAction),
     ) {
         if (gym == null) {
             CircularProgressIndicator(
