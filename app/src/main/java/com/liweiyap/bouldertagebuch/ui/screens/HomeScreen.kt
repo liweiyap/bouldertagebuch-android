@@ -58,7 +58,9 @@ fun HomeScreen(
     var doShowDifficultySelectDialog: Boolean by rememberSaveable { mutableStateOf(false) }
 
     HomeScreen(
-        viewModel = viewModel,
+        todayGymId = viewModel.todayGymId.collectAsState().value,
+        todayRouteCount = viewModel.todayRouteCount.collectAsState().value,
+        userDefinedGym = viewModel.userDefinedGym.collectAsState().value,
         onRequestGymSelectDialog = { doShowGymSelectDialog = true },
         onRequestDifficultySelectDialog = { doShowDifficultySelectDialog = true },
         onRequestNavigateToHistory = {
@@ -80,23 +82,6 @@ fun HomeScreen(
             viewModel = viewModel,
         )
     }
-}
-
-@Composable
-private fun HomeScreen(
-    viewModel: MainViewModel,
-    onRequestGymSelectDialog: () -> Unit = {},
-    onRequestDifficultySelectDialog: () -> Unit = {},
-    onRequestNavigateToHistory: () -> Unit = {},
-) {
-    HomeScreen(
-        todayGymId = viewModel.todayGymId.collectAsState().value,
-        todayRouteCount = viewModel.todayRouteCount.collectAsState().value,
-        userDefinedGym = viewModel.userDefinedGym.collectAsState().value,
-        onRequestGymSelectDialog = onRequestGymSelectDialog,
-        onRequestDifficultySelectDialog = onRequestDifficultySelectDialog,
-        onRequestNavigateToHistory = onRequestNavigateToHistory,
-    )
 }
 
 @Composable
