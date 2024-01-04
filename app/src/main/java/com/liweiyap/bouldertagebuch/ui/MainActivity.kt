@@ -66,13 +66,14 @@ private fun MainComposable() {
 
     MainComposable(
         onRequestGymSelectDialog = { doShowGymSelectDialog = true },
+        onRequestDifficultySelectDialog = { doShowDifficultySelectDialog = true },
     )
 
     if (doShowGymSelectDialog) {
         DialogGymSelect(
             onDismissRequest = { doShowGymSelectDialog = false },
             viewModel = viewModel(),
-            onRequestDifficultySelectDialog = { doShowDifficultySelectDialog = true }
+            onRequestDifficultySelectDialog = { doShowDifficultySelectDialog = true },
         )
     }
 
@@ -87,6 +88,7 @@ private fun MainComposable() {
 @Composable
 private fun MainComposable(
     onRequestGymSelectDialog: () -> Unit,
+    onRequestDifficultySelectDialog: () -> Unit,
 ) {
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -105,6 +107,7 @@ private fun MainComposable(
 
             BubbleTodayRouteCount(
                 onRequestGymSelectDialog = onRequestGymSelectDialog,
+                onRequestDifficultySelectDialog = onRequestDifficultySelectDialog,
             )
         }
     }
@@ -113,6 +116,7 @@ private fun MainComposable(
 @Composable
 private fun BubbleTodayRouteCount(
     onRequestGymSelectDialog: () -> Unit = {},
+    onRequestDifficultySelectDialog: () -> Unit = {},
 ) {
     if (LocalInspectionMode.current) {
         BubbleTodayRouteCount(
@@ -124,6 +128,7 @@ private fun BubbleTodayRouteCount(
         BubbleTodayRouteCount(
             viewModel = viewModel(),
             onRequestGymSelectDialog = onRequestGymSelectDialog,
+            onRequestDifficultySelectDialog = onRequestDifficultySelectDialog,
         )
     }
 }
@@ -132,14 +137,14 @@ private fun BubbleTodayRouteCount(
 private fun BubbleTodayRouteCount(
     viewModel: MainViewModel,
     onRequestGymSelectDialog: () -> Unit = {},
+    onRequestDifficultySelectDialog: () -> Unit = {},
 ) {
     BubbleTodayRouteCount(
         todayGymId = viewModel.todayGymId.collectAsState().value,
         todayRouteCount = viewModel.todayRouteCount.collectAsState().value,
         userDefinedGym = viewModel.userDefinedGym.collectAsState().value,
-        onAddToCount = {},
-        onRemoveFromCount = {},
         onRequestGymSelectDialog = onRequestGymSelectDialog,
+        onRequestDifficultySelectDialog = onRequestDifficultySelectDialog,
     )
 }
 
@@ -148,9 +153,8 @@ private fun BubbleTodayRouteCount(
     todayGymId: GymId,
     todayRouteCount: List<Int>,
     userDefinedGym: Gym? = null,
-    onAddToCount: () -> Unit = {},
-    onRemoveFromCount: () -> Unit = {},
     onRequestGymSelectDialog: () -> Unit = {},
+    onRequestDifficultySelectDialog: () -> Unit = {},
 ) {
     val todayGym: Gym? = remember(todayGymId, userDefinedGym) {
         when (todayGymId) {
@@ -197,7 +201,7 @@ private fun BubbleTodayRouteCount(
                     onRequestGymSelectDialog()
                 }
                 else {
-                    onAddToCount()
+                    onRequestDifficultySelectDialog()
                 }
             }
 
@@ -207,7 +211,7 @@ private fun BubbleTodayRouteCount(
                 text = stringResource(id = R.string.button_route_count_remove),
                 isEnabled = (todayRouteCount.sum() > 0),
             ) {
-                onRemoveFromCount()
+                onRequestDifficultySelectDialog()
             }
         }
 
