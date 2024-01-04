@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -40,6 +41,8 @@ import com.liweiyap.bouldertagebuch.model.gymVels
 import com.liweiyap.bouldertagebuch.ui.components.AppTextButtonCircular
 import com.liweiyap.bouldertagebuch.ui.components.BubbleLayout
 import com.liweiyap.bouldertagebuch.ui.components.DifficultyColorIndicator
+import com.liweiyap.bouldertagebuch.ui.components.ScrollBarConfig
+import com.liweiyap.bouldertagebuch.ui.components.verticalScrollWithScrollbar
 import com.liweiyap.bouldertagebuch.ui.dialogs.DialogDifficultySelect
 import com.liweiyap.bouldertagebuch.ui.dialogs.DialogGymSelect
 import com.liweiyap.bouldertagebuch.ui.theme.AppDimensions
@@ -105,10 +108,20 @@ private fun MainComposable(
                 overflow = TextOverflow.Ellipsis,
             )
 
-            BubbleTodayRouteCount(
-                onRequestGymSelectDialog = onRequestGymSelectDialog,
-                onRequestDifficultySelectDialog = onRequestDifficultySelectDialog,
-            )
+            Column(
+                modifier = Modifier
+                    .verticalScrollWithScrollbar(
+                        state = rememberScrollState(),
+                        scrollbarConfig = ScrollBarConfig(
+                            doFade = false,
+                        )
+                    ),
+            ) {
+                BubbleTodayRouteCount(
+                    onRequestGymSelectDialog = onRequestGymSelectDialog,
+                    onRequestDifficultySelectDialog = onRequestDifficultySelectDialog,
+                )
+            }
         }
     }
 }
