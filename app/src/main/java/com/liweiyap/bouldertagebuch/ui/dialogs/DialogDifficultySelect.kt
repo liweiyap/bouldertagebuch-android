@@ -1,6 +1,5 @@
 package com.liweiyap.bouldertagebuch.ui.dialogs
 
-import android.annotation.SuppressLint
 import android.content.res.Configuration
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -18,14 +17,10 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -68,19 +63,17 @@ fun DialogDifficultySelect(
     onDismissRequest: () -> Unit = {},
     gym: Gym?,
     todayRouteCount: List<Int>,
-    onPositiveButtonClicked: (List<Int>) -> Unit = {},
+    onRouteCountIncreased: (Int) -> Unit = {},
+    onRouteCountDecreased: (Int) -> Unit = {},
+    onRouteCountZero: () -> Unit = {},
 ) {
-    // we don't want to trigger recomposition of all rows when the value of only one row changes
-    @SuppressLint("MutableCollectionMutableState")
-    val todayRouteCountCopyState: MutableState<ArrayList<Int>> = rememberSaveable {
-        mutableStateOf(ArrayList(todayRouteCount))
-    }
-
     AppDialog(
         onDismissRequest = onDismissRequest,
         title = stringResource(id = R.string.title_dialog_difficulty_select),
-        positiveButton = Pair(stringResource(id = R.string.button_dialog_positive_difficutly_select)) {
-            onPositiveButtonClicked(todayRouteCountCopyState.value)
+        positiveButton = Pair(stringResource(id = R.string.button_dialog_positive_difficulty_select)) {
+            if (todayRouteCount.sum() == 0) {
+                onRouteCountZero()
+            }
             onDismissRequest()
         },
     ) {
@@ -171,7 +164,8 @@ fun DialogDifficultySelect(
                         DialogDifficultySelectRouteCountEditor(
                             index = index,
                             todayRouteCount = todayRouteCount,
-                            todayRouteCountCopyState = todayRouteCountCopyState,
+                            onRouteCountIncreased = onRouteCountIncreased,
+                            onRouteCountDecreased = onRouteCountDecreased,
                         )
                     }
                 }
@@ -263,19 +257,17 @@ private fun DifficultyArrow(
 private fun DialogDifficultySelectRouteCountEditor(
     index: Int,
     todayRouteCount: List<Int>,
-    todayRouteCountCopyState: MutableState<ArrayList<Int>>,
+    onRouteCountIncreased: (Int) -> Unit,
+    onRouteCountDecreased: (Int) -> Unit,
 ) {
-    var routeCount: Int by rememberSaveable { mutableIntStateOf(todayRouteCount[index]) }
-
     DialogDifficultySelectRouteCountButton(
         text = stringResource(id = R.string.button_route_count_add),
     ) {
-        ++routeCount
-        ++todayRouteCountCopyState.value[index]
+        onRouteCountIncreased(index)
     }
 
     Text(
-        text = routeCount.toString(),
+        text = todayRouteCount[index].toString(),
         style = MaterialTheme.typography.displayMedium,
         maxLines = 1,
         modifier = Modifier.padding(
@@ -284,18 +276,11 @@ private fun DialogDifficultySelectRouteCountEditor(
         )
     )
 
-    val isRemoveButtonEnabled: Boolean by remember {
-        derivedStateOf {
-            routeCount > 0
-        }
-    }
-
     DialogDifficultySelectRouteCountButton(
         text = stringResource(id = R.string.button_route_count_remove),
-        isEnabled = isRemoveButtonEnabled,
+        isEnabled = (todayRouteCount[index] > 0),
     ) {
-        --routeCount
-        --todayRouteCountCopyState.value[index]
+        onRouteCountDecreased(index)
     }
 }
 

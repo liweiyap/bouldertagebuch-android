@@ -29,7 +29,15 @@ class MainViewModel @Inject constructor(
         repo.setTodayGymId(id)
     }
 
-    fun setTodayRouteCount(count: List<Int>) = viewModelScope.launch {
-        repo.setTodayRouteCount(count)
+    fun increaseTodayRouteCount(index: Int) = viewModelScope.launch {
+        repo.increaseTodayRouteCount(index)
+    }
+
+    fun decreaseTodayRouteCount(index: Int) = viewModelScope.launch {
+        repo.decreaseTodayRouteCount(index)
+    }
+
+    fun clearTodayRouteCount() = viewModelScope.launch {
+        repo.clearTodayRouteCount()
     }
 }

@@ -10,7 +10,8 @@ object AppDimensions {
 
     val mainScreenArrangementSpacing: Dp = 16.dp
     val bubbleArrangementSpacing: Dp = 16.dp
-    val todayRouteCountFlowSpacing: Dp = 16.dp
+    val todayRouteCountFlowSpacingHorizontal: Dp = 16.dp
+    val todayRouteCountFlowSpacingVertical: Dp = 8.dp
     val todayRouteCountFlowItemSpacing: Dp = 2.dp
     val dialogDifficultySelectRouteImageSpacing: Dp = 4.dp
 

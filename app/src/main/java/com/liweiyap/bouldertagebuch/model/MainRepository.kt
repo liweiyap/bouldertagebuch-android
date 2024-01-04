@@ -5,6 +5,7 @@ import androidx.datastore.dataStore
 import com.liweiyap.bouldertagebuch.model.datastore.UserPreferences
 import com.liweiyap.bouldertagebuch.model.datastore.UserPreferencesSerializer
 import com.liweiyap.bouldertagebuch.utils.getDate
+import kotlinx.collections.immutable.mutate
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.util.Collections
@@ -35,20 +36,41 @@ class MainRepository @Inject constructor(
         }
     }
 
-    suspend fun setTodayRouteCount(count: List<Int>) {
+    suspend fun increaseTodayRouteCount(index: Int) {
         context.dataStore.updateData { userPrefs: UserPreferences ->
             userPrefs.copy(
-                log = if (count.sum() == 0)
-                    userPrefs.log.remove(getDate())
-                else
-                    userPrefs.log.put(getDate(), Pair(userPrefs.log[getDate()]!!.first, count))
+                log = userPrefs.log.mutate { map ->
+                    val newCount = ArrayList(map[getDate()]!!.second)
+                    ++newCount[index]
+                    map[getDate()] = Pair(userPrefs.log[getDate()]!!.first, newCount)
+                }
+            )
+        }
+    }
+
+    suspend fun decreaseTodayRouteCount(index: Int) {
+        context.dataStore.updateData { userPrefs: UserPreferences ->
+            userPrefs.copy(
+                log = userPrefs.log.mutate { map ->
+                    val newCount = ArrayList(map[getDate()]!!.second)
+                    --newCount[index]
+                    map[getDate()] = Pair(userPrefs.log[getDate()]!!.first, newCount)
+                }
+            )
+        }
+    }
+
+    suspend fun clearTodayRouteCount() {
+        context.dataStore.updateData { userPrefs: UserPreferences ->
+            userPrefs.copy(
+                log = userPrefs.log.remove(getDate())
             )
         }
     }
 
     fun getTodayRouteCount(): Flow<List<Int>> {
         return context.dataStore.data.map { userPrefs: UserPreferences ->
-            userPrefs.log[getDate()]?.second ?: arrayListOf()
+            userPrefs.log[getDate()]?.second ?: listOf()
         }
     }
 

@@ -228,7 +228,8 @@ private fun BubbleTodayRouteCountFlow(
 ) {
     FlowRow(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(AppDimensions.todayRouteCountFlowSpacing),
+        horizontalArrangement = Arrangement.spacedBy(AppDimensions.todayRouteCountFlowSpacingHorizontal),
+        verticalArrangement = Arrangement.spacedBy(AppDimensions.todayRouteCountFlowSpacingVertical),
     ) {
         val levels: ArrayList<ArrayList<Difficulty>> = remember(todayGym) {
             todayGym.getDifficultiesSortedByLevel()
@@ -323,7 +324,9 @@ fun DialogDifficultySelect(
         onDismissRequest = onDismissRequest,
         gym = gym,
         todayRouteCount = viewModel.todayRouteCount.collectAsState().value,
-        onPositiveButtonClicked = viewModel::setTodayRouteCount,
+        onRouteCountIncreased = viewModel::increaseTodayRouteCount,
+        onRouteCountDecreased = viewModel::decreaseTodayRouteCount,
+        onRouteCountZero = viewModel::clearTodayRouteCount,
     )
 }
 
