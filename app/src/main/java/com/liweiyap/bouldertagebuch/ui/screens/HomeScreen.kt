@@ -64,7 +64,9 @@ fun HomeScreen(
         onRequestGymSelectDialog = { doShowGymSelectDialog = true },
         onRequestDifficultySelectDialog = { doShowDifficultySelectDialog = true },
         onRequestNavigateToHistory = {
-            navController.navigate(route = NavDestinationScreen.History.route)
+            navController.navigate(route = NavDestinationScreen.History.route) {
+                launchSingleTop = true
+            }
         },
     )
 
