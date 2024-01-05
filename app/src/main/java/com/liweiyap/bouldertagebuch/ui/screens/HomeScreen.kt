@@ -28,7 +28,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavController
 import com.liweiyap.bouldertagebuch.R
 import com.liweiyap.bouldertagebuch.model.Difficulty
 import com.liweiyap.bouldertagebuch.model.Gym
@@ -44,14 +43,14 @@ import com.liweiyap.bouldertagebuch.ui.components.ScrollBarConfig
 import com.liweiyap.bouldertagebuch.ui.components.verticalScrollWithScrollbar
 import com.liweiyap.bouldertagebuch.ui.dialogs.DialogDifficultySelect
 import com.liweiyap.bouldertagebuch.ui.dialogs.DialogGymSelect
-import com.liweiyap.bouldertagebuch.ui.navigation.NavDestinationScreen
+import com.liweiyap.bouldertagebuch.ui.navigation.AppNavHostController
 import com.liweiyap.bouldertagebuch.ui.theme.AppDimensions
 import com.liweiyap.bouldertagebuch.ui.theme.AppTheme
 import java.util.Collections
 
 @Composable
 fun HomeScreen(
-    navController: NavController,
+    appNavHostController: AppNavHostController,
     viewModel: MainViewModel,
 ) {
     var doShowGymSelectDialog: Boolean by rememberSaveable { mutableStateOf(false) }
@@ -63,11 +62,7 @@ fun HomeScreen(
         userDefinedGym = viewModel.userDefinedGym.collectAsState().value,
         onRequestGymSelectDialog = { doShowGymSelectDialog = true },
         onRequestDifficultySelectDialog = { doShowDifficultySelectDialog = true },
-        onRequestNavigateToHistory = {
-            navController.navigate(route = NavDestinationScreen.History.route) {
-                launchSingleTop = true
-            }
-        },
+        onRequestNavigateToHistory = appNavHostController::navigateToHistory,
     )
 
     if (doShowGymSelectDialog) {
