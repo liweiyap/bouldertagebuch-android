@@ -1,6 +1,7 @@
 package com.liweiyap.bouldertagebuch.ui.theme
 
 import androidx.compose.ui.graphics.Color
+import com.liweiyap.bouldertagebuch.ui.components.HistoryHeatMapQuartile
 
 object AppColor {
     val backgroundLight: Color = Color(red = 246F/255F, green = 246F/255F, blue = 248F/255F)
@@ -38,6 +39,18 @@ object AppColor {
     private val routePink: Color = Color(red = 254F/255F, green = 85F/255F, blue = 221F/255F)
     private val routeTurquoise: Color = Color(red = 156F/255F, green = 202F/255F, blue = 203F/255F)
 
+    private val heatMapBlankLight: Color = Color(red = 235F/255F, green = 237F/255F, blue = 240F/255F)
+    private val heatMapQuartile1Light: Color = Color(red = 255F/255F, green = 238F/255F, blue = 74F/255F)
+    private val heatMapQuartile2Light: Color = Color(red = 255F/255F, green = 197F/255F, blue = 1F/255F)
+    private val heatMapQuartile3Light: Color = Color(red = 254F/255F, green = 150F/255F, blue = 1F/255F)
+    private val heatMapQuartile4Light: Color = Color(red = 3F/255F, green = 0F/255F, blue = 28F/255F)
+
+    private val heatMapBlankDark: Color = Color(red = 22F/255F, green = 27F/255F, blue = 34F/255F)
+    private val heatMapQuartile1Dark: Color = Color(red = 99F/255F, green = 28F/255F, blue = 3F/255F)
+    private val heatMapQuartile2Dark: Color = Color(red = 189F/255F, green = 86F/255F, blue = 29F/255F)
+    private val heatMapQuartile3Dark: Color = Color(red = 250F/255F, green = 122F/255F, blue = 24F/255F)
+    private val heatMapQuartile4Dark: Color = Color(red = 253F/255F, green = 223F/255F, blue = 104F/255F)
+
     fun translateRouteColorName(name: String, isSystemInDarkTheme: Boolean): Color {
         return when (name) {
             "grey" -> if (isSystemInDarkTheme) routeGreyLight else routeGreyDark
@@ -57,5 +70,15 @@ object AppColor {
 
     fun getBorderColorFromRouteColorName(isSystemInDarkTheme: Boolean): Color {
         return if (isSystemInDarkTheme) routeWhiteDark else routeBlackLight
+    }
+
+    fun getHeatMapColor(quartile: HistoryHeatMapQuartile, isSystemInDarkTheme: Boolean): Color {
+        return when (quartile) {
+            HistoryHeatMapQuartile.NONE -> if (isSystemInDarkTheme) heatMapBlankDark else heatMapBlankLight
+            HistoryHeatMapQuartile.FIRST -> if (isSystemInDarkTheme) heatMapQuartile1Dark else heatMapQuartile1Light
+            HistoryHeatMapQuartile.SECOND -> if (isSystemInDarkTheme) heatMapQuartile2Dark else heatMapQuartile2Light
+            HistoryHeatMapQuartile.THIRD -> if (isSystemInDarkTheme) heatMapQuartile3Dark else heatMapQuartile3Light
+            HistoryHeatMapQuartile.FOURTH -> if (isSystemInDarkTheme) heatMapQuartile4Dark else heatMapQuartile4Light
+        }
     }
 }

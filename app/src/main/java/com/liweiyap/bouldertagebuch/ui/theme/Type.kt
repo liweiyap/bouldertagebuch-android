@@ -31,4 +31,5 @@ val appTypography = Typography(
     titleMedium = getBaseTextStyle(fontSize = 17.sp),
     bodyMedium = getBaseTextStyle(fontSize = 17.sp),
     bodySmall = getBaseTextStyle(fontSize = 12.sp),
+    labelSmall = getBaseTextStyle(fontSize = 10.sp),
 )

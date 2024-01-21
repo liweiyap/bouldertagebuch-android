@@ -10,6 +10,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,8 +23,11 @@ class MainViewModel @Inject constructor(
     private val _todayGymId: MutableStateFlow<GymId> = repo.getTodayGymId().mutableStateIn(scope = viewModelScope, initialValue = GymId.UNKNOWN)
     val todayGymId = _todayGymId.asStateFlow()
 
-    private val _todayRouteCount: MutableStateFlow<List<Int>> = repo.getTodayRouteCount().mutableStateIn(scope = viewModelScope, initialValue = arrayListOf())
+    private val _todayRouteCount: MutableStateFlow<List<Int>> = repo.getTodayRouteCount().mutableStateIn(scope = viewModelScope, initialValue = listOf())
     val todayRouteCount = _todayRouteCount.asStateFlow()
+
+    private val _paginatedLog: MutableStateFlow<Map<LocalDate, Pair<GymId, List<Int>>>> = repo.getPaginatedLog().mutableStateIn(scope = viewModelScope, initialValue = mapOf())
+    val paginatedLog = _paginatedLog.asStateFlow()
 
     fun setTodayGymId(id: GymId) = viewModelScope.launch {
         repo.setTodayGymId(id)

@@ -4,11 +4,13 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 object AppDimensions {
-    val mainScreenPadding: Dp = 16.dp
+    val screenPadding: Dp = 16.dp
     val bubblePadding: Dp = 16.dp
     val dialogPadding: Dp = 16.dp
+    val heatMapCalendarCellPadding: Dp = 2.dp
+    val heatMapCalendarScrollEndPadding: Dp = 6.dp
 
-    val mainScreenArrangementSpacing: Dp = 16.dp
+    val screenArrangementSpacing: Dp = 16.dp
     val bubbleArrangementSpacing: Dp = 16.dp
     val todayRouteCountFlowSpacingHorizontal: Dp = 16.dp
     val todayRouteCountFlowSpacingVertical: Dp = 8.dp
@@ -19,12 +21,18 @@ object AppDimensions {
     val dialogContentsMarginVertical: Dp = 16.dp
     val dialogDifficultySelectRouteMarginBottom: Dp = 8.dp
     val dialogDifficultySelectRouteCountButtonMargin: Dp = 8.dp
+    val heatMapCalendarMarginVertical: Dp = 10.dp
+    val heatMapCalendarWeekHeaderMarginHorizontal: Dp = 4.dp
+    val heatMapCalendarMonthHeaderMarginBottom: Dp = 1.dp
+    val heatMapCalendarMonthHeaderMarginStart: Dp = 1.dp
+    val heatMapCalendarLegendMarginHorizontal: Dp = 44.dp
 
     val todayRouteCountButtonSize: Dp = 40.dp
     val todayRouteCountFlowItemSize: Dp = 20.dp
     val dialogDifficultySelectRouteImageSize: Dp = 40.dp
     val dialogDifficultySelectRouteCountButtonSize: Dp = 40.dp
     val dialogDifficultySelectProgressIndicatorSize: Dp = 64.dp
+    val heatMapCalendarCellSize: Dp = 18.dp
 
     val dialogMinWidth: Dp = 280.dp
     val dialogMaxWidth: Dp = 560.dp

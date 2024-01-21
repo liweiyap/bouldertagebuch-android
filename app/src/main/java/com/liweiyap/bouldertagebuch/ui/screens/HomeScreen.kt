@@ -95,11 +95,11 @@ private fun HomeScreen(
         color = MaterialTheme.colorScheme.background,
     ) {
         Column(
-            modifier = Modifier.padding(AppDimensions.mainScreenPadding),
-            verticalArrangement = Arrangement.spacedBy(AppDimensions.mainScreenArrangementSpacing),
+            modifier = Modifier.padding(AppDimensions.screenPadding),
+            verticalArrangement = Arrangement.spacedBy(AppDimensions.screenArrangementSpacing),
         ) {
             Text(
-                text = stringResource(id = R.string.title_main),
+                text = stringResource(id = R.string.title_screen_home),
                 style = MaterialTheme.typography.titleLarge,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -113,7 +113,7 @@ private fun HomeScreen(
                             doFade = false,
                         )
                     ),
-                verticalArrangement = Arrangement.spacedBy(AppDimensions.mainScreenArrangementSpacing),
+                verticalArrangement = Arrangement.spacedBy(AppDimensions.screenArrangementSpacing),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 BubbleTodayRouteCount(

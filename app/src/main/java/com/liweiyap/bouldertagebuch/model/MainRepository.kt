@@ -8,6 +8,7 @@ import com.liweiyap.bouldertagebuch.utils.getDate
 import kotlinx.collections.immutable.mutate
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.datetime.LocalDate
 import java.util.Collections
 import javax.inject.Inject
 
@@ -18,7 +19,7 @@ class MainRepository @Inject constructor(
 ) {
     fun getUserDefinedGym(): Flow<Gym?> {
         return context.dataStore.data.map { userPrefs: UserPreferences ->
-            userPrefs.gym2
+            userPrefs.userDefinedGym0
         }
     }
 
@@ -40,9 +41,10 @@ class MainRepository @Inject constructor(
         context.dataStore.updateData { userPrefs: UserPreferences ->
             userPrefs.copy(
                 log = userPrefs.log.mutate { map ->
-                    val newCount = ArrayList(map[getDate()]!!.second)
+                    val today: LocalDate = getDate()
+                    val newCount = ArrayList(map[today]!!.second)
                     ++newCount[index]
-                    map[getDate()] = Pair(userPrefs.log[getDate()]!!.first, newCount)
+                    map[today] = Pair(userPrefs.log[today]!!.first, newCount)
                 }
             )
         }
@@ -52,9 +54,10 @@ class MainRepository @Inject constructor(
         context.dataStore.updateData { userPrefs: UserPreferences ->
             userPrefs.copy(
                 log = userPrefs.log.mutate { map ->
-                    val newCount = ArrayList(map[getDate()]!!.second)
+                    val today: LocalDate = getDate()
+                    val newCount = ArrayList(map[today]!!.second)
                     --newCount[index]
-                    map[getDate()] = Pair(userPrefs.log[getDate()]!!.first, newCount)
+                    map[today] = Pair(userPrefs.log[today]!!.first, newCount)
                 }
             )
         }
@@ -71,6 +74,14 @@ class MainRepository @Inject constructor(
     fun getTodayRouteCount(): Flow<List<Int>> {
         return context.dataStore.data.map { userPrefs: UserPreferences ->
             userPrefs.log[getDate()]?.second ?: listOf()
+        }
+    }
+
+    fun getPaginatedLog(): Flow<Map<LocalDate, Pair<GymId, List<Int>>>> {
+        return context.dataStore.data.map { userPrefs: UserPreferences ->
+            userPrefs.log.filter {
+                it.key.year == userPrefs.viewedYear
+            }
         }
     }
 

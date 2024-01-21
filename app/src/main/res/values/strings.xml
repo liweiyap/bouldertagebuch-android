@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Bouldering Log</string>
-    <string name="title_main">Bouldering Log</string>
+    <string name="title_screen_home">Bouldering Log</string>
+    <string name="title_screen_history">History</string>
     <string name="title_bubble_today_route_count">Today</string>
     <string name="title_dialog_gym_select">Select gym</string>
     <string name="title_dialog_difficulty_select">Select difficulty</string>
@@ -15,4 +16,25 @@
     <string name="difficulty_tooltip_prefix">Grade:\u0020</string>
     <string name="difficulty_tooltip_hint">* Long-press colours to show tooltip (if available)</string>
     <string name="difficulty_arrow_label">harder</string>
+    <string name="heatmap_quartile_min_label">Less</string>
+    <string name="heatmap_quartile_max_label">More</string>
+    <string name="monday_short">Mon</string>
+    <string name="tuesday_short">Tue</string>
+    <string name="wednesday_short">Wed</string>
+    <string name="thursday_short">Thu</string>
+    <string name="friday_short">Fri</string>
+    <string name="saturday_short">Sat</string>
+    <string name="sunday_short">Sun</string>
+    <string name="january_short">Jan</string>
+    <string name="february_short">Feb</string>
+    <string name="march_short">Mar</string>
+    <string name="april_short">Apr</string>
+    <string name="may_short">May</string>
+    <string name="june_short">Jun</string>
+    <string name="july_short">Jul</string>
+    <string name="august_short">Aug</string>
+    <string name="september_short">Sep</string>
+    <string name="october_short">Oct</string>
+    <string name="november_short">Nov</string>
+    <string name="december_short">Dec</string>
 </resources>

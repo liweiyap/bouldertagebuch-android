@@ -143,7 +143,7 @@ private fun AppDialogAlertButtonPositive(
                 Color.Transparent,
         ),
         interactionSource = interactionSource,
-        shape = MaterialTheme.shapes.extraSmall,
+        shape = MaterialTheme.shapes.small,
     ) {
         Text(
             text = text,

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Bouldertagebuch</string>
-    <string name="title_main">Bouldertagebuch</string>
+    <string name="title_screen_home">Bouldertagebuch</string>
+    <string name="title_screen_history">Verlauf</string>
     <string name="title_bubble_today_route_count">Heute</string>
     <string name="title_dialog_gym_select">Halle auswählen</string>
     <string name="title_dialog_difficulty_select">Schwierigkeitsgrad auswählen</string>
@@ -15,4 +16,25 @@
     <string name="difficulty_tooltip_prefix">Stufe:\u0020</string>
     <string name="difficulty_tooltip_hint">* Auf Farben lang gedrückt halten, um Kurzinfo anzuzeigen (falls verfügbar)</string>
     <string name="difficulty_arrow_label">schwerer</string>
+    <string name="heatmap_quartile_min_label">Weniger</string>
+    <string name="heatmap_quartile_max_label">Mehr</string>
+    <string name="monday_short">Mo</string>
+    <string name="tuesday_short">Di</string>
+    <string name="wednesday_short">Mi</string>
+    <string name="thursday_short">Do</string>
+    <string name="friday_short">Fr</string>
+    <string name="saturday_short">Sa</string>
+    <string name="sunday_short">So</string>
+    <string name="january_short">Jan.</string>
+    <string name="february_short">Feb.</string>
+    <string name="march_short">März</string>
+    <string name="april_short">Apr.</string>
+    <string name="may_short">Mai</string>
+    <string name="june_short">Jun.</string>
+    <string name="july_short">Jul.</string>
+    <string name="august_short">Aug.</string>
+    <string name="september_short">Sept.</string>
+    <string name="october_short">Okt.</string>
+    <string name="november_short">Nov.</string>
+    <string name="december_short">Dez.</string>
 </resources>
