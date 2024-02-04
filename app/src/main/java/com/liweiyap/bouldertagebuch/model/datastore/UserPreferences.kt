@@ -18,5 +18,5 @@ data class UserPreferences(
     val viewedYear: Int = getDate().year,
 
     @Serializable(with = PersistentMapSerializer::class)
-    val log: PersistentMap<LocalDate, Pair<GymId, List<Int>>> = persistentMapOf(),
+    val log: PersistentMap<LocalDate, Pair<GymId, List<Int>>> = persistentMapOf(),  // ordered, unlike persistentHashMapOf
 )

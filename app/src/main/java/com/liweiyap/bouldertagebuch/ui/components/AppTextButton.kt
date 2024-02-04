@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -13,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -34,6 +36,7 @@ fun AppTextButton(
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
     maxLines: Int = Int.MAX_VALUE,
     overflow: TextOverflow = TextOverflow.Clip,
+    iconVector: ImageVector? = null,
     shape: Shape = ButtonDefaults.shape,
     elevation: Dp = AppDimensions.buttonElevation,
     isEnabled: Boolean = true,
@@ -65,6 +68,13 @@ fun AppTextButton(
             modifier = Modifier
                 .align(Alignment.CenterVertically),  // vertical centering of the Text composable
         )
+
+        if (iconVector != null) {
+            Icon(
+                imageVector = iconVector,
+                contentDescription = null,
+            )
+        }
     }
 }
 

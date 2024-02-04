@@ -85,6 +85,42 @@ class MainRepository @Inject constructor(
         }
     }
 
+    fun getYears(): Flow<List<Int>> {
+        return context.dataStore.data.map { userPrefs: UserPreferences ->
+            val years: ArrayList<Int> = arrayListOf()
+            val today: LocalDate = getDate()
+
+            val iterator: Iterator<Map.Entry<LocalDate, Pair<GymId, List<Int>>>> = userPrefs.log.entries.iterator()
+            if (iterator.hasNext()) {
+                val firstEntryYear: Int = iterator.next().key.year
+                years.add(firstEntryYear)
+
+                for (year in (firstEntryYear + 1) .. today.year) {
+                    years.add(year)
+                }
+            }
+            else {
+                years.add(today.year)
+            }
+
+            years.reversed()
+        }
+    }
+
+    suspend fun setViewedYear(year: Int) {
+        context.dataStore.updateData { userPrefs: UserPreferences ->
+            userPrefs.copy(
+                viewedYear = year
+            )
+        }
+    }
+
+    fun getViewedYear(): Flow<Int> {
+        return context.dataStore.data.map { userPrefs: UserPreferences ->
+            userPrefs.viewedYear
+        }
+    }
+
     companion object {
         private fun initTodayRouteList(gymId: GymId): List<Int> {
             val size: Int = when (gymId) {

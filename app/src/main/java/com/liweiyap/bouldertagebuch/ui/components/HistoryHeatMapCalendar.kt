@@ -1,3 +1,6 @@
+// hack to work around HeatMapCalendarState having internal constructor
+@file:Suppress("INVISIBLE_MEMBER")
+
 package com.liweiyap.bouldertagebuch.ui.components
 
 import androidx.compose.foundation.background
@@ -17,8 +20,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,14 +36,15 @@ import com.kizitonwose.calendar.compose.CalendarLayoutInfo
 import com.kizitonwose.calendar.compose.HeatMapCalendar
 import com.kizitonwose.calendar.compose.heatmapcalendar.HeatMapCalendarState
 import com.kizitonwose.calendar.compose.heatmapcalendar.HeatMapWeek
-import com.kizitonwose.calendar.compose.heatmapcalendar.rememberHeatMapCalendarState
 import com.kizitonwose.calendar.core.CalendarMonth
+import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.liweiyap.bouldertagebuch.R
 import com.liweiyap.bouldertagebuch.model.GymId
 import com.liweiyap.bouldertagebuch.ui.theme.AppColor
 import com.liweiyap.bouldertagebuch.ui.theme.AppDimensions
 import com.liweiyap.bouldertagebuch.utils.short
 import com.liweiyap.bouldertagebuch.utils.toKotlin
+import com.liweiyap.bouldertagebuch.utils.yearMonthToJava
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
 
@@ -88,17 +92,26 @@ private fun mapRouteCountToHeat(
 
 @Composable
 fun HistoryHeatMapCalendar(
-    state: HeatMapCalendarState = rememberHeatMapCalendarState(),
     paginatedLog: Map<LocalDate, Pair<GymId, List<Int>>>,
     startDate: LocalDate,
     endDate: LocalDate,
 ) {
     Column {
-        val heatLog: Map<LocalDate, HistoryHeatMapQuartile> by remember { mutableStateOf(mapRouteCountToHeat(paginatedLog)) }
+        val heatLog: Map<LocalDate, HistoryHeatMapQuartile> = mapRouteCountToHeat(paginatedLog)
+
+        val heatMapCalendarState = rememberSaveable(startDate, endDate, saver = HeatMapCalendarState.Saver) {
+            HeatMapCalendarState(
+                startMonth = startDate.yearMonthToJava(),
+                endMonth = endDate.yearMonthToJava(),
+                firstVisibleMonth = endDate.yearMonthToJava(),
+                firstDayOfWeek = firstDayOfWeekFromLocale(),
+                visibleItemState = null,
+            )
+        }
 
         HeatMapCalendar(
-            modifier = Modifier.padding(vertical = AppDimensions.heatMapCalendarMarginVertical),
-            state = state,
+            modifier = Modifier.padding(bottom = AppDimensions.heatMapCalendarMarginVertical),
+            state = heatMapCalendarState,
             contentPadding = PaddingValues(end = AppDimensions.heatMapCalendarScrollEndPadding),
             dayContent = { calendarDay, heatMapWeek ->
                 val currentDate: LocalDate = calendarDay.date.toKotlin()
@@ -112,8 +125,12 @@ fun HistoryHeatMapCalendar(
                 ) {
                 }
             },
-            weekHeader = { HistoryHeatMapCalendarWeekHeader(it) },
-            monthHeader = { HistoryHeatMapCalendarMonthHeader(it, endDate, state) },
+            weekHeader = { dayOfWeek ->
+                HistoryHeatMapCalendarWeekHeader(dayOfWeek)
+            },
+            monthHeader = { calendarMonth ->
+                HistoryHeatMapCalendarMonthHeader(calendarMonth, endDate, heatMapCalendarState)
+            },
         )
 
         HistoryHeatMapLegend(

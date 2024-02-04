@@ -15,33 +15,38 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import com.kizitonwose.calendar.compose.heatmapcalendar.rememberHeatMapCalendarState
-import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.liweiyap.bouldertagebuch.R
 import com.liweiyap.bouldertagebuch.model.GymId
 import com.liweiyap.bouldertagebuch.ui.MainViewModel
 import com.liweiyap.bouldertagebuch.ui.components.HistoryHeatMapCalendar
 import com.liweiyap.bouldertagebuch.ui.components.ScrollBarConfig
+import com.liweiyap.bouldertagebuch.ui.components.Spinner
 import com.liweiyap.bouldertagebuch.ui.components.verticalScrollWithScrollbar
 import com.liweiyap.bouldertagebuch.ui.theme.AppDimensions
 import com.liweiyap.bouldertagebuch.utils.getDate
-import com.liweiyap.bouldertagebuch.utils.yearMonthToJava
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.minus
+import kotlinx.datetime.plus
 
 @Composable
 fun HistoryScreen(
     viewModel: MainViewModel,
 ) {
     HistoryScreen(
+        years = viewModel.years.collectAsState().value,
+        viewedYear = viewModel.viewedYear.collectAsState().value,
         paginatedLog = viewModel.paginatedLog.collectAsState().value,
+        onItemSelected = viewModel::setViewedYear,
     )
 }
 
 @Composable
 private fun HistoryScreen(
+    years: List<Int>,
+    viewedYear: Int,
     paginatedLog: Map<LocalDate, Pair<GymId, List<Int>>>,
+    onItemSelected: (Int) -> Unit,
 ) {
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -69,17 +74,32 @@ private fun HistoryScreen(
                 verticalArrangement = Arrangement.spacedBy(AppDimensions.screenArrangementSpacing),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                val endDate: LocalDate = remember { getDate() }
-                val startDate: LocalDate = remember { endDate.minus(value = 12, unit = DateTimeUnit.MONTH) }
-                val state = rememberHeatMapCalendarState(
-                    startMonth = startDate.yearMonthToJava(),
-                    endMonth = endDate.yearMonthToJava(),
-                    firstVisibleMonth = endDate.yearMonthToJava(),
-                    firstDayOfWeek = firstDayOfWeekFromLocale(),
+                Spinner(
+                    modifier = Modifier.align(Alignment.End),
+                    title = viewedYear.toString(),
+                    items = years,
+                    onItemSelected = onItemSelected,
                 )
 
+                val today: LocalDate = getDate()
+                val endDate: LocalDate = remember(viewedYear) {
+                    if (viewedYear == today.year) {
+                        today
+                    }
+                    else {
+                        LocalDate(year = viewedYear, monthNumber = 12, dayOfMonth = 31)
+                    }
+                }
+                val startDate: LocalDate = remember(endDate) {
+                    if (viewedYear == today.year) {
+                        endDate.minus(value = 12, unit = DateTimeUnit.MONTH).plus(value = 1, unit = DateTimeUnit.DAY)
+                    }
+                    else {
+                        LocalDate(year = viewedYear, monthNumber = 1, dayOfMonth = 1)
+                    }
+                }
+
                 HistoryHeatMapCalendar(
-                    state = state,
                     paginatedLog = paginatedLog,
                     startDate = startDate,
                     endDate = endDate,
