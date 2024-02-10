@@ -95,6 +95,7 @@ fun HistoryHeatMapCalendar(
     paginatedLog: Map<LocalDate, Pair<GymId, List<Int>>>,
     startDate: LocalDate,
     endDate: LocalDate,
+    onDateSelected: (LocalDate) -> Unit,
 ) {
     Column {
         val heatLog: Map<LocalDate, HistoryHeatMapQuartile> = mapRouteCountToHeat(paginatedLog)
@@ -122,8 +123,8 @@ fun HistoryHeatMapCalendar(
                     startDate = startDate,
                     endDate = endDate,
                     quartile = heatLog[currentDate] ?: HistoryHeatMapQuartile.NONE,
-                ) {
-                }
+                    onClick = onDateSelected,
+                )
             },
             weekHeader = { dayOfWeek ->
                 HistoryHeatMapCalendarWeekHeader(dayOfWeek)
@@ -136,7 +137,11 @@ fun HistoryHeatMapCalendar(
         HistoryHeatMapLegend(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = AppDimensions.heatMapCalendarLegendMarginHorizontal),
+                .padding(
+                    start = AppDimensions.heatMapCalendarLegendMarginHorizontal,
+                    end = AppDimensions.heatMapCalendarLegendMarginHorizontal,
+                    bottom = AppDimensions.heatMapCalendarLegendMarginBottom,
+                ),
         )
     }
 }

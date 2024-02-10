@@ -12,9 +12,10 @@ object AppDimensions {
 
     val screenArrangementSpacing: Dp = 16.dp
     val bubbleArrangementSpacing: Dp = 16.dp
-    val todayRouteCountFlowSpacingHorizontal: Dp = 16.dp
-    val todayRouteCountFlowSpacingVertical: Dp = 8.dp
-    val todayRouteCountFlowItemSpacing: Dp = 2.dp
+    val bubbleRouteCountFlowSpacingHorizontal: Dp = 16.dp
+    val bubbleRouteCountFlowSpacingVertical: Dp = 8.dp
+    val bubbleRouteCountFlowItemSpacing: Dp = 2.dp
+    val bubbleSelectedDateGymNameSpacing: Dp = 8.dp
     val dialogDifficultySelectRouteImageSpacing: Dp = 4.dp
 
     val todayRouteCountButtonMargin: Dp = 8.dp
@@ -26,9 +27,10 @@ object AppDimensions {
     val heatMapCalendarMonthHeaderMarginBottom: Dp = 1.dp
     val heatMapCalendarMonthHeaderMarginStart: Dp = 1.dp
     val heatMapCalendarLegendMarginHorizontal: Dp = 44.dp
+    val heatMapCalendarLegendMarginBottom: Dp = 8.dp
 
     val todayRouteCountButtonSize: Dp = 40.dp
-    val todayRouteCountFlowItemSize: Dp = 20.dp
+    val bubbleRouteCountFlowItemSize: Dp = 20.dp
     val dialogDifficultySelectRouteImageSize: Dp = 40.dp
     val dialogDifficultySelectRouteCountButtonSize: Dp = 40.dp
     val dialogDifficultySelectProgressIndicatorSize: Dp = 64.dp

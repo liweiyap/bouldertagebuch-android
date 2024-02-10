@@ -48,6 +48,10 @@ fun java.time.LocalDate.toKotlin(): LocalDate {
     return LocalDate(this.year, this.monthValue, this.dayOfMonth)
 }
 
+fun LocalDate.toJava(): java.time.LocalDate {
+    return java.time.LocalDate.of(this.year, this.month, this.dayOfMonth)
+}
+
 fun LocalDate.yearMonthToJava(): java.time.YearMonth {
     return java.time.YearMonth.of(this.year, this.month)
 }

@@ -3,12 +3,9 @@ package com.liweiyap.bouldertagebuch.ui.screens
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
@@ -29,7 +26,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.liweiyap.bouldertagebuch.R
-import com.liweiyap.bouldertagebuch.model.Difficulty
 import com.liweiyap.bouldertagebuch.model.Gym
 import com.liweiyap.bouldertagebuch.model.GymId
 import com.liweiyap.bouldertagebuch.model.gymRockerei
@@ -38,7 +34,7 @@ import com.liweiyap.bouldertagebuch.ui.MainViewModel
 import com.liweiyap.bouldertagebuch.ui.components.AppTextButton
 import com.liweiyap.bouldertagebuch.ui.components.AppTextButtonCircular
 import com.liweiyap.bouldertagebuch.ui.components.BubbleLayout
-import com.liweiyap.bouldertagebuch.ui.components.DifficultyColorIndicator
+import com.liweiyap.bouldertagebuch.ui.components.BubbleRouteCountFlowRow
 import com.liweiyap.bouldertagebuch.ui.components.ScrollBarConfig
 import com.liweiyap.bouldertagebuch.ui.components.verticalScrollWithScrollbar
 import com.liweiyap.bouldertagebuch.ui.dialogs.DialogDifficultySelect
@@ -200,64 +196,11 @@ private fun BubbleTodayRouteCount(
         }
 
         if ((todayGym != null) && (todayRouteCount.sum() > 0)) {
-            BubbleTodayRouteCountFlow(
-                todayGym = todayGym,
-                todayRouteCount = todayRouteCount,
+            BubbleRouteCountFlowRow(
+                gym = todayGym,
+                routeCount = todayRouteCount,
             )
         }
-    }
-}
-
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-private fun BubbleTodayRouteCountFlow(
-    todayGym: Gym,
-    todayRouteCount: List<Int>,
-) {
-    FlowRow(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(AppDimensions.todayRouteCountFlowSpacingHorizontal),
-        verticalArrangement = Arrangement.spacedBy(AppDimensions.todayRouteCountFlowSpacingVertical),
-    ) {
-        val levels: ArrayList<ArrayList<Difficulty>> = remember(todayGym) {
-            todayGym.getDifficultiesSortedByLevel()
-        }
-
-        for ((index, level) in levels.withIndex()) {
-            BubbleTodayRouteCountFlowItem(
-                index = index,
-                level = level,
-                todayRouteCount = todayRouteCount,
-            )
-        }
-    }
-}
-
-@Composable
-private fun BubbleTodayRouteCountFlowItem(
-    index: Int,
-    level: ArrayList<Difficulty>,
-    todayRouteCount: List<Int>,
-) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(AppDimensions.todayRouteCountFlowItemSpacing),
-        ) {
-            for (difficulty in level) {
-                DifficultyColorIndicator(
-                    difficulty = difficulty,
-                    size = AppDimensions.todayRouteCountFlowItemSize,
-                )
-            }
-        }
-
-        Text(
-            text = todayRouteCount[index].toString(),
-            style = MaterialTheme.typography.bodyMedium,
-            maxLines = 1,
-        )
     }
 }
 
