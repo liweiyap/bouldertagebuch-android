@@ -95,8 +95,9 @@ private fun HistoryScreen(
 
                 Spinner(
                     modifier = Modifier.align(Alignment.End),
-                    title = viewedYear.toString(),
+                    title = stringResource(id = R.string.heatmap_spinner_title_prefix) + viewedYear,
                     items = years,
+                    viewedItem = viewedYear,
                     onItemSelected = { year ->
                         onItemSelected.invoke(year)
                         selectedDate = null

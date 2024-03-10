@@ -4,8 +4,10 @@ import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,6 +25,7 @@ fun <T> Spinner(
     modifier: Modifier = Modifier,
     title: String,
     items: List<T>,
+    viewedItem: T,
     onItemSelected: (T) -> Unit = {},
 ) {
     var isExpanded: Boolean by remember { mutableStateOf(false) }
@@ -56,6 +59,14 @@ fun <T> Spinner(
                             overflow = TextOverflow.Ellipsis,
                         )
                     },
+                    leadingIcon = {
+                        if (item == viewedItem) {
+                            Icon(
+                                imageVector = Icons.Filled.Check,
+                                contentDescription = null,
+                            )
+                        }
+                    },
                     onClick = {
                         isExpanded = false
                         onItemSelected(item)
@@ -73,7 +84,8 @@ private fun SpinnerPreview() {
     AppTheme {
         Spinner(
             items = listOf("2024"),
-            title = "2024",
+            viewedItem = "2024",
+            title = "Year: 2024",
         )
     }
 }

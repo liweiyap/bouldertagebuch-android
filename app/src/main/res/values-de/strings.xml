@@ -18,6 +18,7 @@
     <string name="difficulty_arrow_label">schwerer</string>
     <string name="heatmap_quartile_min_label">Weniger</string>
     <string name="heatmap_quartile_max_label">Mehr</string>
+    <string name="heatmap_spinner_title_prefix">Jahr:\u0020</string>
     <string name="bubble_selected_heatmap_entry_blank">Keine Routen aufgenommen</string>
     <string name="monday_short">Mo</string>
     <string name="tuesday_short">Di</string>
