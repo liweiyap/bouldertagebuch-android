@@ -121,6 +121,20 @@ class MainRepository @Inject constructor(
         }
     }
 
+    suspend fun setViewedHighlightedGymId(gymId: GymId) {
+        context.dataStore.updateData { userPrefs: UserPreferences ->
+            userPrefs.copy(
+                viewedHighlightedGymId = gymId
+            )
+        }
+    }
+
+    fun getViewedHighlightedGymId(): Flow<GymId> {
+        return context.dataStore.data.map { userPrefs: UserPreferences ->
+            userPrefs.viewedHighlightedGymId
+        }
+    }
+
     companion object {
         private fun initTodayRouteList(gymId: GymId): List<Int> {
             val size: Int = when (gymId) {

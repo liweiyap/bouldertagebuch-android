@@ -4,6 +4,7 @@
     <string name="title_screen_home">Bouldering Log</string>
     <string name="title_screen_history">History</string>
     <string name="title_bubble_today_route_count">Today</string>
+    <string name="title_bubble_yearly_highlight_prefix">Highlight:</string>
     <string name="title_dialog_gym_select">Select gym</string>
     <string name="title_dialog_difficulty_select">Select difficulty</string>
     <string name="button_route_count_add">+</string>
@@ -20,6 +21,7 @@
     <string name="heatmap_quartile_max_label">More</string>
     <string name="heatmap_spinner_title_prefix">Year:\u0020</string>
     <string name="bubble_selected_heatmap_entry_blank">No routes recorded</string>
+    <string name="bubble_yearly_highlight_blank">No highlights found</string>
     <string name="monday_short">Mon</string>
     <string name="tuesday_short">Tue</string>
     <string name="wednesday_short">Wed</string>

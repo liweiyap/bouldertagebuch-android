@@ -35,7 +35,9 @@ fun BubbleLayout(
             .clip(MaterialTheme.shapes.large),
     ) {
         Column (
-            modifier = Modifier.padding(AppDimensions.bubblePadding),
+            modifier = Modifier
+                .padding(AppDimensions.bubblePadding)
+                .fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(AppDimensions.bubbleArrangementSpacing),
         ) {
             content()

@@ -36,6 +36,9 @@ class MainViewModel @Inject constructor(
     private val _viewedYear: MutableStateFlow<Int> = repo.getViewedYear().mutableStateIn(scope = viewModelScope, initialValue = getDate().year)
     val viewedYear = _viewedYear.asStateFlow()
 
+    private val _viewedHighlightedGymId: MutableStateFlow<GymId> = repo.getViewedHighlightedGymId().mutableStateIn(scope = viewModelScope, initialValue = GymId.ROCKEREI)
+    val viewedHighlightedGymId = _viewedHighlightedGymId.asStateFlow()
+
     fun setTodayGymId(id: GymId) = viewModelScope.launch {
         repo.setTodayGymId(id)
     }
@@ -54,5 +57,9 @@ class MainViewModel @Inject constructor(
 
     fun setViewedYear(year: Int) = viewModelScope.launch {
         repo.setViewedYear(year)
+    }
+
+    fun setViewedHighlightedGymId(gymId: GymId) = viewModelScope.launch {
+        repo.setViewedHighlightedGymId(gymId)
     }
 }

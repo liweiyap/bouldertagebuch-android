@@ -25,6 +25,7 @@ fun <T> Spinner(
     modifier: Modifier = Modifier,
     title: String,
     items: List<T>,
+    itemToString: (T) -> String = { it.toString() },
     viewedItem: T,
     onItemSelected: (T) -> Unit = {},
 ) {
@@ -53,7 +54,7 @@ fun <T> Spinner(
                 DropdownMenuItem(
                     text = {
                         Text(
-                            text = item.toString(),
+                            text = itemToString(item),
                             style = MaterialTheme.typography.bodyMedium,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,

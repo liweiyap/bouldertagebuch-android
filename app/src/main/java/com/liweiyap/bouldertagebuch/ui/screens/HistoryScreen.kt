@@ -30,7 +30,6 @@ import com.liweiyap.bouldertagebuch.ui.MainViewModel
 import com.liweiyap.bouldertagebuch.ui.components.BubbleLayout
 import com.liweiyap.bouldertagebuch.ui.components.HistoryHeatMapCalendar
 import com.liweiyap.bouldertagebuch.ui.components.BubbleRouteCountFlowRow
-import com.liweiyap.bouldertagebuch.ui.components.ScrollBarConfig
 import com.liweiyap.bouldertagebuch.ui.components.Spinner
 import com.liweiyap.bouldertagebuch.ui.components.verticalScrollWithScrollbar
 import com.liweiyap.bouldertagebuch.ui.theme.AppDimensions
@@ -51,8 +50,10 @@ fun HistoryScreen(
         years = viewModel.years.collectAsState().value,
         viewedYear = viewModel.viewedYear.collectAsState().value,
         paginatedLog = viewModel.paginatedLog.collectAsState().value,
+        viewedHighlightedGymId = viewModel.viewedHighlightedGymId.collectAsState().value,
         userDefinedGym = viewModel.userDefinedGym.collectAsState().value,
-        onItemSelected = viewModel::setViewedYear,
+        onYearSelected = viewModel::setViewedYear,
+        onHighlightedGymSelected = viewModel::setViewedHighlightedGymId,
     )
 }
 
@@ -61,8 +62,10 @@ private fun HistoryScreen(
     years: List<Int>,
     viewedYear: Int,
     paginatedLog: Map<LocalDate, Pair<GymId, List<Int>>>,
+    viewedHighlightedGymId: GymId,
     userDefinedGym: Gym? = null,
-    onItemSelected: (Int) -> Unit,
+    onYearSelected: (Int) -> Unit,
+    onHighlightedGymSelected: (GymId) -> Unit,
 ) {
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -83,9 +86,6 @@ private fun HistoryScreen(
                 modifier = Modifier
                     .verticalScrollWithScrollbar(
                         state = rememberScrollState(),
-                        scrollbarConfig = ScrollBarConfig(
-                            doFade = false,
-                        )
                     ),
                 verticalArrangement = Arrangement.spacedBy(AppDimensions.screenArrangementSpacing),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -99,7 +99,7 @@ private fun HistoryScreen(
                     items = years,
                     viewedItem = viewedYear,
                     onItemSelected = { year ->
-                        onItemSelected.invoke(year)
+                        onYearSelected.invoke(year)
                         selectedDate = null
                     },
                 )
@@ -138,6 +138,13 @@ private fun HistoryScreen(
                         selectedDate = it,
                     )
                 }
+
+                BubbleYearlyHighlight(
+                    paginatedLog = paginatedLog,
+                    viewedHighlightedGymId = viewedHighlightedGymId,
+                    userDefinedGym = userDefinedGym,
+                    onHighlightedGymSelected = onHighlightedGymSelected,
+                )
             }
         }
     }
@@ -157,50 +164,151 @@ private fun BubbleSelectedDayRouteCount(
             overflow = TextOverflow.Ellipsis,
         )
 
-        val selectedDateEntry: Pair<GymId, List<Int>>? = paginatedLog[selectedDate.toKotlin()]
-        if (selectedDateEntry == null) {
-            Text(
-                text = stringResource(id = R.string.bubble_selected_heatmap_entry_blank),
-                style = MaterialTheme.typography.bodySmall,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-            )
-        }
-        else {
-            val selectedDateGym: Gym? = when (selectedDateEntry.first) {
-                gymRockerei.id -> gymRockerei
-                gymVels.id -> gymVels
-                userDefinedGym?.id -> userDefinedGym
-                else -> null
-            }
-            val selectedDateRouteCount = selectedDateEntry.second.sum()
+        BubbleDayContent(
+            paginatedLog = paginatedLog,
+            userDefinedGym = userDefinedGym,
+            selectedDate = selectedDate,
+        )
+    }
+}
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
+@Composable
+private fun BubbleYearlyHighlight(
+    paginatedLog: Map<LocalDate, Pair<GymId, List<Int>>>,
+    viewedHighlightedGymId: GymId,
+    userDefinedGym: Gym? = null,
+    onHighlightedGymSelected: (GymId) -> Unit,
+) {
+    BubbleLayout {
+        val viewedHighlightedGym: Gym? = when (viewedHighlightedGymId) {
+            gymRockerei.id -> gymRockerei
+            gymVels.id -> gymVels
+            userDefinedGym?.id -> userDefinedGym
+            else -> null
+        }
+
+        if (viewedHighlightedGym != null) {
+            Spinner(
+                modifier = Modifier.align(Alignment.End),
+                title = viewedHighlightedGym.name,
+                items = if (userDefinedGym == null) listOf(gymRockerei, gymVels) else listOf(gymRockerei, gymVels, userDefinedGym),
+                itemToString = { it.name },
+                viewedItem = viewedHighlightedGym,
+                onItemSelected = { gym ->
+                    onHighlightedGymSelected.invoke(gym.id)
+                },
+            )
+
+            val highlightedDate = getHighlightedDateByGym(paginatedLog, viewedHighlightedGymId)
+            if (highlightedDate == null) {
                 Text(
-                    text = selectedDateRouteCount.toString(),
-                    style = MaterialTheme.typography.displayMedium,
-                    maxLines = 1,
+                    text = stringResource(id = R.string.bubble_yearly_highlight_blank),
+                    style = MaterialTheme.typography.bodySmall,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
+            else {
+                Text(
+                    text = "${stringResource(id = R.string.title_bubble_yearly_highlight_prefix)} ${highlightedDate.dayOfMonth}. ${highlightedDate.month.short(LocalContext.current)} ${highlightedDate.year}",
+                    style = MaterialTheme.typography.titleMedium,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
                 )
 
-                if (selectedDateGym != null) {
-                    Text(
-                        text = selectedDateGym.name,
-                        style = MaterialTheme.typography.bodySmall,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.padding(start = AppDimensions.bubbleSelectedDateGymNameSpacing),
-                    )
-                }
-            }
-
-            if ((selectedDateGym != null) && (selectedDateRouteCount > 0)) {
-                BubbleRouteCountFlowRow(
-                    gym = selectedDateGym,
-                    routeCount = selectedDateEntry.second,
+                BubbleDayContent(
+                    paginatedLog = paginatedLog,
+                    userDefinedGym = userDefinedGym,
+                    selectedDate = highlightedDate,
                 )
             }
         }
     }
+}
+
+@Composable
+private fun BubbleDayContent(
+    paginatedLog: Map<LocalDate, Pair<GymId, List<Int>>>,
+    userDefinedGym: Gym? = null,
+    selectedDate: java.time.LocalDate,
+) {
+    val selectedDateEntry: Pair<GymId, List<Int>>? = paginatedLog[selectedDate.toKotlin()]
+    if (selectedDateEntry == null) {
+        Text(
+            text = stringResource(id = R.string.bubble_selected_heatmap_entry_blank),
+            style = MaterialTheme.typography.bodySmall,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
+        )
+    }
+    else {
+        val selectedDateGym: Gym? = when (selectedDateEntry.first) {
+            gymRockerei.id -> gymRockerei
+            gymVels.id -> gymVels
+            userDefinedGym?.id -> userDefinedGym
+            else -> null
+        }
+        val selectedDateRouteCount = selectedDateEntry.second.sum()
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = selectedDateRouteCount.toString(),
+                style = MaterialTheme.typography.displayMedium,
+                maxLines = 1,
+            )
+
+            if (selectedDateGym != null) {
+                Text(
+                    text = selectedDateGym.name,
+                    style = MaterialTheme.typography.bodySmall,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(start = AppDimensions.bubbleSelectedDateGymNameSpacing),
+                )
+            }
+        }
+
+        if ((selectedDateGym != null) && (selectedDateRouteCount > 0)) {
+            BubbleRouteCountFlowRow(
+                gym = selectedDateGym,
+                routeCount = selectedDateEntry.second,
+            )
+        }
+    }
+}
+
+fun getHighlightedDateByGym(
+    paginatedLog: Map<LocalDate, Pair<GymId, List<Int>>>,
+    viewedHighlightedGymId: GymId,
+): java.time.LocalDate? {
+    var highlightedDate: LocalDate? = null
+    var highlightedRouteCount = 0
+    var highlightedDifficultyIdx = 0
+
+    paginatedLog
+        .filterValues { entry -> entry.first == viewedHighlightedGymId }
+        .forEach { entry ->
+            val maxIdx: Int = entry.value.second.indexOfLast { count ->
+                count > 0
+            }
+
+            if (maxIdx != -1) {  // if a maximum index is found
+                val maxRouteCount: Int = entry.value.second[maxIdx]
+                if (highlightedDifficultyIdx == maxIdx) {
+                    if (highlightedRouteCount < maxRouteCount) {
+                        highlightedRouteCount = maxRouteCount
+                        highlightedDate = entry.key
+                    }
+                }
+                else if (highlightedDifficultyIdx < maxIdx) {
+                    highlightedDifficultyIdx = maxIdx
+                    highlightedRouteCount = maxRouteCount
+                    highlightedDate = entry.key
+                }
+            }
+        }
+
+    return highlightedDate?.toJava()
 }

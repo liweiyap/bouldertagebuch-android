@@ -16,6 +16,7 @@ import kotlinx.serialization.Serializable
 data class UserPreferences(
     val userDefinedGym0: Gym? = null,
     val viewedYear: Int = getDate().year,
+    val viewedHighlightedGymId: GymId = GymId.ROCKEREI,
 
     @Serializable(with = PersistentMapSerializer::class)
     val log: PersistentMap<LocalDate, Pair<GymId, List<Int>>> = persistentMapOf(),  // ordered, unlike persistentHashMapOf

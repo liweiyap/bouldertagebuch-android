@@ -4,6 +4,7 @@
     <string name="title_screen_home">Bouldertagebuch</string>
     <string name="title_screen_history">Verlauf</string>
     <string name="title_bubble_today_route_count">Heute</string>
+    <string name="title_bubble_yearly_highlight_prefix">Höhepunkt:</string>
     <string name="title_dialog_gym_select">Halle auswählen</string>
     <string name="title_dialog_difficulty_select">Schwierigkeitsgrad auswählen</string>
     <string name="button_route_count_add">+</string>
@@ -20,6 +21,7 @@
     <string name="heatmap_quartile_max_label">Mehr</string>
     <string name="heatmap_spinner_title_prefix">Jahr:\u0020</string>
     <string name="bubble_selected_heatmap_entry_blank">Keine Routen aufgenommen</string>
+    <string name="bubble_yearly_highlight_blank">Keine Höhepunkte gefunden</string>
     <string name="monday_short">Mo</string>
     <string name="tuesday_short">Di</string>
     <string name="wednesday_short">Mi</string>
