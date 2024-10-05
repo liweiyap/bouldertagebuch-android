@@ -1,5 +1,6 @@
 package com.liweiyap.bouldertagebuch.ui.screens
 
+import android.content.Intent
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -30,6 +31,7 @@ import com.liweiyap.bouldertagebuch.model.Gym
 import com.liweiyap.bouldertagebuch.model.GymId
 import com.liweiyap.bouldertagebuch.model.gymRockerei
 import com.liweiyap.bouldertagebuch.model.gymVels
+import com.liweiyap.bouldertagebuch.services.SystemBroadcastReceiver
 import com.liweiyap.bouldertagebuch.ui.MainViewModel
 import com.liweiyap.bouldertagebuch.ui.components.AppTextButton
 import com.liweiyap.bouldertagebuch.ui.components.AppTextButtonCircular
@@ -42,6 +44,7 @@ import com.liweiyap.bouldertagebuch.ui.dialogs.DialogGymSelect
 import com.liweiyap.bouldertagebuch.ui.navigation.AppNavHostController
 import com.liweiyap.bouldertagebuch.ui.theme.AppDimensions
 import com.liweiyap.bouldertagebuch.ui.theme.AppTheme
+import com.liweiyap.bouldertagebuch.utils.getDate
 import java.util.Collections
 
 @Composable
@@ -49,6 +52,10 @@ fun HomeScreen(
     appNavHostController: AppNavHostController,
     viewModel: MainViewModel,
 ) {
+    SystemBroadcastReceiver(systemAction = Intent.ACTION_TIME_TICK) {
+        viewModel.setCurrentDate(getDate())
+    }
+
     var doShowGymSelectDialog: Boolean by rememberSaveable { mutableStateOf(false) }
     var doShowDifficultySelectDialog: Boolean by rememberSaveable { mutableStateOf(false) }
 

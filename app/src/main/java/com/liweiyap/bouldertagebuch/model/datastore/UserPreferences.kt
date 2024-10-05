@@ -14,8 +14,9 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class UserPreferences(
+    val currentDate: LocalDate = getDate(),
     val userDefinedGym0: Gym? = null,
-    val viewedYear: Int = getDate().year,
+    val viewedYear: Int = currentDate.year,
     val viewedHighlightedGymId: GymId = GymId.ROCKEREI,
 
     @Serializable(with = PersistentMapSerializer::class)

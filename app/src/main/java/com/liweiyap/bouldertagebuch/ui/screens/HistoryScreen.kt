@@ -1,5 +1,6 @@
 package com.liweiyap.bouldertagebuch.ui.screens
 
+import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,6 +27,7 @@ import com.liweiyap.bouldertagebuch.model.Gym
 import com.liweiyap.bouldertagebuch.model.GymId
 import com.liweiyap.bouldertagebuch.model.gymRockerei
 import com.liweiyap.bouldertagebuch.model.gymVels
+import com.liweiyap.bouldertagebuch.services.SystemBroadcastReceiver
 import com.liweiyap.bouldertagebuch.ui.MainViewModel
 import com.liweiyap.bouldertagebuch.ui.components.BubbleLayout
 import com.liweiyap.bouldertagebuch.ui.components.HistoryHeatMapCalendar
@@ -46,6 +48,10 @@ import kotlinx.datetime.plus
 fun HistoryScreen(
     viewModel: MainViewModel,
 ) {
+    SystemBroadcastReceiver(systemAction = Intent.ACTION_TIME_TICK) {
+        viewModel.setCurrentDate(getDate())
+    }
+
     HistoryScreen(
         years = viewModel.years.collectAsState().value,
         viewedYear = viewModel.viewedYear.collectAsState().value,

@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.datastore.dataStore
 import com.liweiyap.bouldertagebuch.model.datastore.UserPreferences
 import com.liweiyap.bouldertagebuch.model.datastore.UserPreferencesSerializer
-import com.liweiyap.bouldertagebuch.utils.getDate
 import kotlinx.collections.immutable.mutate
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -17,6 +16,17 @@ val Context.dataStore by dataStore(fileName = "user-prefs.json", serializer = Us
 class MainRepository @Inject constructor(
     private val context: Context,
 ) {
+    suspend fun setCurrentDate(date: LocalDate) {
+        context.dataStore.updateData { userPrefs: UserPreferences ->
+            userPrefs.copy(
+                currentDate = if (date > userPrefs.currentDate)
+                    date
+                else
+                    userPrefs.currentDate
+            )
+        }
+    }
+
     fun getUserDefinedGym(): Flow<Gym?> {
         return context.dataStore.data.map { userPrefs: UserPreferences ->
             userPrefs.userDefinedGym0
@@ -26,14 +36,14 @@ class MainRepository @Inject constructor(
     suspend fun setTodayGymId(id: GymId) {
         context.dataStore.updateData { userPrefs: UserPreferences ->
             userPrefs.copy(
-                log = userPrefs.log.put(getDate(), Pair(id, initTodayRouteList(id)))
+                log = userPrefs.log.put(userPrefs.currentDate, Pair(id, initTodayRouteList(id)))
             )
         }
     }
 
     fun getTodayGymId(): Flow<GymId> {
         return context.dataStore.data.map { userPrefs: UserPreferences ->
-            userPrefs.log[getDate()]?.first ?: GymId.UNKNOWN
+            userPrefs.log[userPrefs.currentDate]?.first ?: GymId.UNKNOWN
         }
     }
 
@@ -41,7 +51,7 @@ class MainRepository @Inject constructor(
         context.dataStore.updateData { userPrefs: UserPreferences ->
             userPrefs.copy(
                 log = userPrefs.log.mutate { map ->
-                    val today: LocalDate = getDate()
+                    val today: LocalDate = userPrefs.currentDate
                     val newCount = ArrayList(map[today]!!.second)
                     ++newCount[index]
                     map[today] = Pair(userPrefs.log[today]!!.first, newCount)
@@ -54,7 +64,7 @@ class MainRepository @Inject constructor(
         context.dataStore.updateData { userPrefs: UserPreferences ->
             userPrefs.copy(
                 log = userPrefs.log.mutate { map ->
-                    val today: LocalDate = getDate()
+                    val today: LocalDate = userPrefs.currentDate
                     val newCount = ArrayList(map[today]!!.second)
                     --newCount[index]
                     map[today] = Pair(userPrefs.log[today]!!.first, newCount)
@@ -66,14 +76,14 @@ class MainRepository @Inject constructor(
     suspend fun clearTodayRouteCount() {
         context.dataStore.updateData { userPrefs: UserPreferences ->
             userPrefs.copy(
-                log = userPrefs.log.remove(getDate())
+                log = userPrefs.log.remove(userPrefs.currentDate)
             )
         }
     }
 
     fun getTodayRouteCount(): Flow<List<Int>> {
         return context.dataStore.data.map { userPrefs: UserPreferences ->
-            userPrefs.log[getDate()]?.second ?: listOf()
+            userPrefs.log[userPrefs.currentDate]?.second ?: listOf()
         }
     }
 
@@ -88,7 +98,7 @@ class MainRepository @Inject constructor(
     fun getYears(): Flow<List<Int>> {
         return context.dataStore.data.map { userPrefs: UserPreferences ->
             val years: ArrayList<Int> = arrayListOf()
-            val today: LocalDate = getDate()
+            val today: LocalDate = userPrefs.currentDate
 
             val iterator: Iterator<Map.Entry<LocalDate, Pair<GymId, List<Int>>>> = userPrefs.log.entries.iterator()
             if (iterator.hasNext()) {

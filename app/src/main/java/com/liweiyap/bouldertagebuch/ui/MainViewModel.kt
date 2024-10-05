@@ -39,6 +39,10 @@ class MainViewModel @Inject constructor(
     private val _viewedHighlightedGymId: MutableStateFlow<GymId> = repo.getViewedHighlightedGymId().mutableStateIn(scope = viewModelScope, initialValue = GymId.ROCKEREI)
     val viewedHighlightedGymId = _viewedHighlightedGymId.asStateFlow()
 
+    fun setCurrentDate(date: LocalDate) = viewModelScope.launch {
+        repo.setCurrentDate(date)
+    }
+
     fun setTodayGymId(id: GymId) = viewModelScope.launch {
         repo.setTodayGymId(id)
     }
