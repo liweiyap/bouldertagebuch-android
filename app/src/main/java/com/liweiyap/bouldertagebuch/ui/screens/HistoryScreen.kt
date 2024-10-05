@@ -32,6 +32,7 @@ import com.liweiyap.bouldertagebuch.ui.MainViewModel
 import com.liweiyap.bouldertagebuch.ui.components.BubbleLayout
 import com.liweiyap.bouldertagebuch.ui.components.HistoryHeatMapCalendar
 import com.liweiyap.bouldertagebuch.ui.components.BubbleRouteCountFlowRow
+import com.liweiyap.bouldertagebuch.ui.components.LifecycleOwner
 import com.liweiyap.bouldertagebuch.ui.components.Spinner
 import com.liweiyap.bouldertagebuch.ui.components.verticalScrollWithScrollbar
 import com.liweiyap.bouldertagebuch.ui.theme.AppDimensions
@@ -49,6 +50,10 @@ fun HistoryScreen(
     viewModel: MainViewModel,
 ) {
     SystemBroadcastReceiver(systemAction = Intent.ACTION_TIME_TICK) {
+        viewModel.setCurrentDate(getDate())
+    }
+
+    LifecycleOwner {
         viewModel.setCurrentDate(getDate())
     }
 
