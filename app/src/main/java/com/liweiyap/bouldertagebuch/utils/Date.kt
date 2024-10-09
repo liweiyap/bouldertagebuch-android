@@ -13,6 +13,7 @@ import kotlinx.datetime.todayIn
 @Immutable
 class ImmutableLocalDate(val value: LocalDate)
 
+// see: https://skyyo.medium.com/performance-in-jetpack-compose-9a85ce02f8f9
 @Immutable
 class ImmutableLocalDateJava(val value: java.time.LocalDate)
 
