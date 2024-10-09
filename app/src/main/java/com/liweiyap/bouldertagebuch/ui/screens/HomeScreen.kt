@@ -2,15 +2,18 @@ package com.liweiyap.bouldertagebuch.ui.screens
 
 import android.content.Intent
 import android.content.res.Configuration
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -23,7 +26,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.liweiyap.bouldertagebuch.R
@@ -43,6 +48,7 @@ import com.liweiyap.bouldertagebuch.ui.components.verticalScrollWithScrollbar
 import com.liweiyap.bouldertagebuch.ui.dialogs.DialogDifficultySelect
 import com.liweiyap.bouldertagebuch.ui.dialogs.DialogGymSelect
 import com.liweiyap.bouldertagebuch.ui.navigation.AppNavHostController
+import com.liweiyap.bouldertagebuch.ui.theme.AppColor
 import com.liweiyap.bouldertagebuch.ui.theme.AppDimensions
 import com.liweiyap.bouldertagebuch.ui.theme.AppTheme
 import com.liweiyap.bouldertagebuch.utils.getDate
@@ -136,6 +142,10 @@ private fun HomeScreen(
 
                 NavigateToHistoryButton(
                     onRequestNavigation = onRequestNavigateToHistory,
+                )
+
+                AuthorNote(
+                    modifier = Modifier.padding(top = AppDimensions.screenArrangementSpacing),
                 )
             }
         }
@@ -251,6 +261,31 @@ private fun NavigateToHistoryButton(
         shape = MaterialTheme.shapes.medium,
         onClick = onRequestNavigation,
     )
+}
+
+@Composable
+private fun AuthorNote(
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(AppDimensions.authorNoteSpacing),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.climbing_minified),
+            contentDescription = "",
+            modifier = Modifier.size(size = AppDimensions.homeBackgroundImageSize),
+            tint = AppColor.getHomeBackgroundIconColor(isSystemInDarkTheme()),
+        )
+
+        Text(
+            text = stringResource(id = R.string.author_note),
+            style = MaterialTheme.typography.labelSmall,
+            maxLines = 2,
+            textAlign = TextAlign.Center,
+        )
+    }
 }
 
 @Preview(name = "Light Mode")

@@ -51,6 +51,9 @@ object AppColor {
     private val heatMapQuartile3Dark: Color = Color(red = 250F/255F, green = 122F/255F, blue = 24F/255F)
     private val heatMapQuartile4Dark: Color = Color(red = 253F/255F, green = 223F/255F, blue = 104F/255F)
 
+    private val homeBackgroundIconLight: Color = Color(red = 250F/255F, green = 223F/255F, blue = 85F/255F)
+    private val homeBackgroundIconDark: Color = Color(red = 154F/255F, green = 147F/255F, blue = 116F/255F)
+
     fun translateRouteColorName(name: String, isSystemInDarkTheme: Boolean): Color {
         return when (name) {
             "grey" -> if (isSystemInDarkTheme) routeGreyLight else routeGreyDark
@@ -80,5 +83,9 @@ object AppColor {
             HistoryHeatMapQuartile.THIRD -> if (isSystemInDarkTheme) heatMapQuartile3Dark else heatMapQuartile3Light
             HistoryHeatMapQuartile.FOURTH -> if (isSystemInDarkTheme) heatMapQuartile4Dark else heatMapQuartile4Light
         }
+    }
+
+    fun getHomeBackgroundIconColor(isSystemInDarkTheme: Boolean): Color {
+        return if (isSystemInDarkTheme) homeBackgroundIconDark else homeBackgroundIconLight
     }
 }

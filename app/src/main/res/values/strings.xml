@@ -42,4 +42,5 @@
     <string name="october_short">Oct</string>
     <string name="november_short">Nov</string>
     <string name="december_short">Dec</string>
+    <string name="author_note" translatable="false">Made in Stuttgart with ❤ by Li-Wei Yap</string>
 </resources>

@@ -17,6 +17,7 @@ object AppDimensions {
     val bubbleRouteCountFlowItemSpacing: Dp = 2.dp
     val bubbleSelectedDateGymNameSpacing: Dp = 8.dp
     val dialogDifficultySelectRouteImageSpacing: Dp = 4.dp
+    val authorNoteSpacing: Dp = 8.dp
 
     val todayRouteCountButtonMargin: Dp = 8.dp
     val dialogContentsMarginVertical: Dp = 16.dp
@@ -35,6 +36,7 @@ object AppDimensions {
     val dialogDifficultySelectRouteCountButtonSize: Dp = 40.dp
     val dialogDifficultySelectProgressIndicatorSize: Dp = 64.dp
     val heatMapCalendarCellSize: Dp = 18.dp
+    val homeBackgroundImageSize: Dp = 42.dp
 
     val dialogMinWidth: Dp = 280.dp
     val dialogMaxWidth: Dp = 560.dp
