@@ -22,4 +22,4 @@ Native Android app for logging personal bouldering training sessions. Written in
 
 Designed and developed by [Li-Wei Yap](https://liweiyap.github.io/). The code within this app is Copyright © 2024 Li-Wei Yap and licensed under the [GNU General Public Licence v3.0](https://github.com/liweiyap/bouldertagebuch-android/blob/main/LICENSE). The code may ___not___ be reproduced without citation.
 
-The app icon in the settings button was taken from www.flaticon.com and designed by [Freepik](https://www.freepik.com/).
+The app icon was taken from www.flaticon.com and designed by [Freepik](https://www.freepik.com/).
