@@ -15,12 +15,14 @@ import androidx.compose.ui.Modifier
 import com.liweiyap.bouldertagebuch.model.Difficulty
 import com.liweiyap.bouldertagebuch.model.Gym
 import com.liweiyap.bouldertagebuch.ui.theme.AppDimensions
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun BubbleRouteCountFlowRow(
     gym: Gym,
-    routeCount: List<Int>,
+    routeCount: ImmutableList<Int>,
 ) {
     FlowRow(
         modifier = Modifier.fillMaxWidth(),
@@ -34,7 +36,7 @@ fun BubbleRouteCountFlowRow(
         for ((index, level) in levels.withIndex()) {
             BubbleRouteCountFlowRowItem(
                 index = index,
-                level = level,
+                level = level.toImmutableList(),
                 routeCount = routeCount,
             )
         }
@@ -44,8 +46,8 @@ fun BubbleRouteCountFlowRow(
 @Composable
 private fun BubbleRouteCountFlowRowItem(
     index: Int,
-    level: ArrayList<Difficulty>,
-    routeCount: List<Int>,
+    level: ImmutableList<Difficulty>,
+    routeCount: ImmutableList<Int>,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,

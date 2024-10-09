@@ -46,6 +46,8 @@ import com.liweiyap.bouldertagebuch.ui.navigation.AppNavHostController
 import com.liweiyap.bouldertagebuch.ui.theme.AppDimensions
 import com.liweiyap.bouldertagebuch.ui.theme.AppTheme
 import com.liweiyap.bouldertagebuch.utils.getDate
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import java.util.Collections
 
 @Composable
@@ -66,7 +68,7 @@ fun HomeScreen(
 
     HomeScreen(
         todayGymId = viewModel.todayGymId.collectAsState().value,
-        todayRouteCount = viewModel.todayRouteCount.collectAsState().value,
+        todayRouteCount = viewModel.todayRouteCount.collectAsState().value.toImmutableList(),
         userDefinedGym = viewModel.userDefinedGym.collectAsState().value,
         onRequestGymSelectDialog = { doShowGymSelectDialog = true },
         onRequestDifficultySelectDialog = { doShowDifficultySelectDialog = true },
@@ -92,7 +94,7 @@ fun HomeScreen(
 @Composable
 private fun HomeScreen(
     todayGymId: GymId,
-    todayRouteCount: List<Int>,
+    todayRouteCount: ImmutableList<Int>,
     userDefinedGym: Gym? = null,
     onRequestGymSelectDialog: () -> Unit = {},
     onRequestDifficultySelectDialog: () -> Unit = {},
@@ -143,7 +145,7 @@ private fun HomeScreen(
 @Composable
 private fun BubbleTodayRouteCount(
     todayGymId: GymId,
-    todayRouteCount: List<Int>,
+    todayRouteCount: ImmutableList<Int>,
     userDefinedGym: Gym? = null,
     onRequestGymSelectDialog: () -> Unit = {},
     onRequestDifficultySelectDialog: () -> Unit = {},
@@ -259,7 +261,7 @@ private fun HomeScreenPreview() {
     AppTheme {
         HomeScreen(
             todayGymId = GymId.VELS,
-            todayRouteCount = ArrayList(Collections.nCopies(gymVels.getDifficultiesSortedByLevel().size, 1)),
+            todayRouteCount = ArrayList(Collections.nCopies(gymVels.getDifficultiesSortedByLevel().size, 1)).toImmutableList(),
         )
     }
 }

@@ -40,6 +40,10 @@ import com.liweiyap.bouldertagebuch.utils.getDate
 import com.liweiyap.bouldertagebuch.utils.short
 import com.liweiyap.bouldertagebuch.utils.toJava
 import com.liweiyap.bouldertagebuch.utils.toKotlin
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.minus
@@ -58,9 +62,9 @@ fun HistoryScreen(
     }
 
     HistoryScreen(
-        years = viewModel.years.collectAsState().value,
+        years = viewModel.years.collectAsState().value.toImmutableList(),
         viewedYear = viewModel.viewedYear.collectAsState().value,
-        paginatedLog = viewModel.paginatedLog.collectAsState().value,
+        paginatedLog = viewModel.paginatedLog.collectAsState().value.toImmutableMap(),
         viewedHighlightedGymId = viewModel.viewedHighlightedGymId.collectAsState().value,
         userDefinedGym = viewModel.userDefinedGym.collectAsState().value,
         onYearSelected = viewModel::setViewedYear,
@@ -70,9 +74,9 @@ fun HistoryScreen(
 
 @Composable
 private fun HistoryScreen(
-    years: List<Int>,
+    years: ImmutableList<Int>,
     viewedYear: Int,
-    paginatedLog: Map<LocalDate, Pair<GymId, List<Int>>>,
+    paginatedLog: ImmutableMap<LocalDate, Pair<GymId, List<Int>>>,
     viewedHighlightedGymId: GymId,
     userDefinedGym: Gym? = null,
     onYearSelected: (Int) -> Unit,
@@ -163,7 +167,7 @@ private fun HistoryScreen(
 
 @Composable
 private fun BubbleSelectedDayRouteCount(
-    paginatedLog: Map<LocalDate, Pair<GymId, List<Int>>>,
+    paginatedLog: ImmutableMap<LocalDate, Pair<GymId, List<Int>>>,
     userDefinedGym: Gym? = null,
     selectedDate: java.time.LocalDate,
 ) {
@@ -185,7 +189,7 @@ private fun BubbleSelectedDayRouteCount(
 
 @Composable
 private fun BubbleYearlyHighlight(
-    paginatedLog: Map<LocalDate, Pair<GymId, List<Int>>>,
+    paginatedLog: ImmutableMap<LocalDate, Pair<GymId, List<Int>>>,
     viewedHighlightedGymId: GymId,
     userDefinedGym: Gym? = null,
     onHighlightedGymSelected: (GymId) -> Unit,
@@ -202,7 +206,7 @@ private fun BubbleYearlyHighlight(
             Spinner(
                 modifier = Modifier.align(Alignment.End),
                 title = viewedHighlightedGym.name,
-                items = if (userDefinedGym == null) listOf(gymRockerei, gymVels) else listOf(gymRockerei, gymVels, userDefinedGym),
+                items = (if (userDefinedGym == null) listOf(gymRockerei, gymVels) else listOf(gymRockerei, gymVels, userDefinedGym)).toImmutableList(),
                 itemToString = { it.name },
                 viewedItem = viewedHighlightedGym,
                 onItemSelected = { gym ->
@@ -284,7 +288,7 @@ private fun BubbleDayContent(
         if ((selectedDateGym != null) && (selectedDateRouteCount > 0)) {
             BubbleRouteCountFlowRow(
                 gym = selectedDateGym,
-                routeCount = selectedDateEntry.second,
+                routeCount = selectedDateEntry.second.toImmutableList(),
             )
         }
     }

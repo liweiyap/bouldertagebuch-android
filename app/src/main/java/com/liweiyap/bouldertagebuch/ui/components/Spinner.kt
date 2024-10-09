@@ -19,12 +19,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.liweiyap.bouldertagebuch.ui.theme.AppTheme
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun <T> Spinner(
     modifier: Modifier = Modifier,
     title: String,
-    items: List<T>,
+    items: ImmutableList<T>,
     itemToString: (T) -> String = { it.toString() },
     viewedItem: T,
     onItemSelected: (T) -> Unit = {},
@@ -84,7 +86,7 @@ fun <T> Spinner(
 private fun SpinnerPreview() {
     AppTheme {
         Spinner(
-            items = listOf("2024"),
+            items = listOf("2024").toImmutableList(),
             viewedItem = "2024",
             title = "Year: 2024",
         )

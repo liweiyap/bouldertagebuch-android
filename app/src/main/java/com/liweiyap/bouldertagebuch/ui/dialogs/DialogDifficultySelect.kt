@@ -61,6 +61,8 @@ import com.liweiyap.bouldertagebuch.ui.theme.AppColor
 import com.liweiyap.bouldertagebuch.ui.theme.AppDimensions
 import com.liweiyap.bouldertagebuch.ui.theme.AppTheme
 import com.liweiyap.bouldertagebuch.utils.vertical
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import java.util.Collections
 
 @Composable
@@ -83,7 +85,7 @@ fun DialogDifficultySelect(
     DialogDifficultySelect(
         onDismissRequest = onDismissRequest,
         gym = gym,
-        todayRouteCount = viewModel.todayRouteCount.collectAsState().value,
+        todayRouteCount = viewModel.todayRouteCount.collectAsState().value.toImmutableList(),
         onRouteCountIncreased = viewModel::increaseTodayRouteCount,
         onRouteCountDecreased = viewModel::decreaseTodayRouteCount,
         onRouteCountZero = viewModel::clearTodayRouteCount,
@@ -94,7 +96,7 @@ fun DialogDifficultySelect(
 fun DialogDifficultySelect(
     onDismissRequest: () -> Unit = {},
     gym: Gym?,
-    todayRouteCount: List<Int>,
+    todayRouteCount: ImmutableList<Int>,
     onRouteCountIncreased: (Int) -> Unit = {},
     onRouteCountDecreased: (Int) -> Unit = {},
     onRouteCountZero: () -> Unit = {},
@@ -306,7 +308,7 @@ private fun DifficultyArrow(
 @Composable
 private fun DialogDifficultySelectRouteCountEditor(
     index: Int,
-    todayRouteCount: List<Int>,
+    todayRouteCount: ImmutableList<Int>,
     onRouteCountIncreased: (Int) -> Unit,
     onRouteCountDecreased: (Int) -> Unit,
 ) {
@@ -386,7 +388,7 @@ private fun DialogDifficultySelectPreview() {
     AppTheme {
         DialogDifficultySelect(
             gym = gymVels,
-            todayRouteCount = ArrayList(Collections.nCopies(gymVels.getDifficultiesSortedByLevel().size, 0)),
+            todayRouteCount = ArrayList(Collections.nCopies(gymVels.getDifficultiesSortedByLevel().size, 0)).toImmutableList(),
         )
     }
 }

@@ -39,6 +39,15 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+
+        // https://github.com/JetBrains/kotlin/blob/master/plugins/compose/design/compiler-metrics.md
+        // e.g. on command line: `./gradlew -Pandroidx.enableComposeCompilerMetrics=true build`
+        freeCompilerArgs += listOf(
+            "-P",
+            "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=" + project.buildDir.absolutePath + "/compose_metrics")
+        freeCompilerArgs += listOf(
+            "-P",
+            "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination="  + project.buildDir.absolutePath + "/compose_metrics")
     }
     buildFeatures {
         compose = true
