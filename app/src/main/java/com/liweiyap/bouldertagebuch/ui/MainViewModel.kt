@@ -67,4 +67,10 @@ class MainViewModel @Inject constructor(
     fun setViewedHighlightedGymId(gymId: GymId) = viewModelScope.launch {
         repo.setViewedHighlightedGymId(gymId)
     }
+
+    /*
+    fun setUpScreenshots() = viewModelScope.launch {
+        repo.setUpScreenshots()
+    }
+    */
 }

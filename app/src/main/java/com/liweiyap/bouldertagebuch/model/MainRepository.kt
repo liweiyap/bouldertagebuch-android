@@ -156,4 +156,40 @@ class MainRepository @Inject constructor(
             return ArrayList(Collections.nCopies(size, 0))
         }
     }
+
+    /*
+    suspend fun setUpScreenshots() {
+        context.dataStore.updateData { userPrefs: UserPreferences ->
+            userPrefs.copy(
+                log = userPrefs.log.mutate { map ->
+                    map[LocalDate(year = 2024, monthNumber = 6, dayOfMonth = 2)]  = Pair(gymVels.id,     listOf(0,0,1,6,2,0,0,0))
+                    map[LocalDate(year = 2024, monthNumber = 6, dayOfMonth = 6)]  = Pair(gymRockerei.id, listOf(0,2,2,2,0,0,0,0))
+                    map[LocalDate(year = 2024, monthNumber = 6, dayOfMonth = 13)] = Pair(gymRockerei.id, listOf(0,1,3,3,0,0,0,0))
+                    map[LocalDate(year = 2024, monthNumber = 6, dayOfMonth = 17)] = Pair(gymVels.id,     listOf(0,0,0,4,1,0,0,0))
+                    map[LocalDate(year = 2024, monthNumber = 6, dayOfMonth = 20)] = Pair(gymRockerei.id, listOf(0,1,2,3,0,0,0,0))
+                    map[LocalDate(year = 2024, monthNumber = 6, dayOfMonth = 27)] = Pair(gymRockerei.id, listOf(0,0,2,4,0,0,0,0))
+                    map[LocalDate(year = 2024, monthNumber = 6, dayOfMonth = 30)] = Pair(gymVels.id,     listOf(0,0,0,3,2,0,0,0))
+                    map[LocalDate(year = 2024, monthNumber = 7, dayOfMonth = 4)]  = Pair(gymRockerei.id, listOf(0,2,4,3,0,0,0,0))
+                    map[LocalDate(year = 2024, monthNumber = 7, dayOfMonth = 10)] = Pair(gymVels.id,     listOf(0,2,2,3,0,0,0,0))
+                    map[LocalDate(year = 2024, monthNumber = 7, dayOfMonth = 14)] = Pair(gymRockerei.id, listOf(0,1,2,4,0,0,0,0))
+                    map[LocalDate(year = 2024, monthNumber = 7, dayOfMonth = 17)] = Pair(gymVels.id,     listOf(0,1,1,3,2,0,0,0))
+                    map[LocalDate(year = 2024, monthNumber = 7, dayOfMonth = 21)] = Pair(gymRockerei.id, listOf(0,0,6,4,0,0,0,0))
+                    map[LocalDate(year = 2024, monthNumber = 7, dayOfMonth = 28)] = Pair(gymRockerei.id, listOf(0,0,4,2,0,0,0,0))
+                    map[LocalDate(year = 2024, monthNumber = 8, dayOfMonth = 1)]  = Pair(gymRockerei.id, listOf(0,0,3,3,0,0,0,0))
+                    map[LocalDate(year = 2024, monthNumber = 8, dayOfMonth = 5)]  = Pair(gymVels.id,     listOf(0,0,0,3,3,0,0,0))
+                    map[LocalDate(year = 2024, monthNumber = 8, dayOfMonth = 22)] = Pair(gymRockerei.id, listOf(0,1,2,3,0,0,0,0))
+                    map[LocalDate(year = 2024, monthNumber = 8, dayOfMonth = 25)] = Pair(gymRockerei.id, listOf(0,0,3,4,0,0,0,0))
+                    map[LocalDate(year = 2024, monthNumber = 8, dayOfMonth = 29)] = Pair(gymRockerei.id, listOf(0,0,2,5,0,0,0,0))
+                    map[LocalDate(year = 2024, monthNumber = 9, dayOfMonth = 2)]  = Pair(gymVels.id,     listOf(0,0,1,2,3,0,0,0))
+                    map[LocalDate(year = 2024, monthNumber = 9, dayOfMonth = 5)]  = Pair(gymRockerei.id, listOf(0,0,4,6,0,0,0,0))
+                    map[LocalDate(year = 2024, monthNumber = 9, dayOfMonth = 19)] = Pair(gymRockerei.id, listOf(0,2,4,3,0,0,0,0))
+                    map[LocalDate(year = 2024, monthNumber = 9, dayOfMonth = 23)] = Pair(gymVels.id,     listOf(0,0,0,2,4,0,0,0))
+                    map[LocalDate(year = 2024, monthNumber = 9, dayOfMonth = 29)] = Pair(gymRockerei.id, listOf(0,0,4,4,0,0,0,0))
+                    map[LocalDate(year = 2024, monthNumber = 10, dayOfMonth = 3)] = Pair(gymRockerei.id, listOf(0,0,3,4,0,0,0,0))
+                    map[LocalDate(year = 2024, monthNumber = 10, dayOfMonth = 6)] = Pair(gymVels.id,     listOf(0,0,0,2,4,0,0,0))
+                }
+            )
+        }
+    }
+    */
 }
