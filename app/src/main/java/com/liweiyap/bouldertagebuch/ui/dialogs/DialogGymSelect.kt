@@ -4,10 +4,12 @@ import android.content.res.Configuration
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -70,6 +72,15 @@ fun DialogGymSelect(
                 text = stringResource(id = R.string.button_dialog_gym_select_create_new).uppercase(),
                 fontWeight = FontWeight.Bold,
                 marginTop = 24.dp,
+                isEnabled = false,
+            )
+
+            Text(
+                modifier = Modifier
+                    .padding(top = 8.dp),
+                text = stringResource(id = R.string.button_dialog_gym_select_create_new_coming_soon),
+                style = MaterialTheme.typography.bodySmall.copy(fontStyle = FontStyle.Italic),
+                maxLines = 2,
             )
         }
         else {
@@ -87,6 +98,7 @@ private fun DialogGymSelectButton(
     fontWeight: FontWeight = FontWeight.Normal,
     marginTop: Dp = 0.dp,
     marginBottom: Dp = 0.dp,
+    isEnabled: Boolean = true,
     onGymSelected:() -> Unit = {},
 ) {
     AppTextButton(
@@ -99,6 +111,7 @@ private fun DialogGymSelectButton(
         maxLines = 2,
         overflow = TextOverflow.Ellipsis,
         shape = MaterialTheme.shapes.medium,
+        isEnabled = isEnabled,
         onClick = onGymSelected,
     )
 }
