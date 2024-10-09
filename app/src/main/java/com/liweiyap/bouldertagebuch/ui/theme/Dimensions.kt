@@ -16,6 +16,7 @@ object AppDimensions {
     val bubbleRouteCountFlowSpacingVertical: Dp = 8.dp
     val bubbleRouteCountFlowItemSpacing: Dp = 2.dp
     val bubbleSelectedDateGymNameSpacing: Dp = 8.dp
+    val bubbleRouteEditImageSpacing: Dp = 4.dp
     val dialogDifficultySelectRouteImageSpacing: Dp = 4.dp
 
     val todayRouteCountButtonMargin: Dp = 8.dp
@@ -31,6 +32,7 @@ object AppDimensions {
 
     val todayRouteCountButtonSize: Dp = 40.dp
     val bubbleRouteCountFlowItemSize: Dp = 20.dp
+    val bubbleRouteEditImageSize: Dp = 40.dp
     val dialogDifficultySelectRouteImageSize: Dp = 40.dp
     val dialogDifficultySelectRouteCountButtonSize: Dp = 40.dp
     val dialogDifficultySelectProgressIndicatorSize: Dp = 64.dp
@@ -41,8 +43,8 @@ object AppDimensions {
     val difficultyColorIndicatorBorderWidth: Dp = 1.dp
     val dialogDifficultyArrowLayoutWidth: Dp = 32.dp
     const val dialogDifficultyArrowStrokeWidth: Float = 8F
-    val navigateToHistoryButtonMinWidth: Dp = 280.dp
-    val navigateToHistoryButtonMaxWidth: Dp = 560.dp
+    val navigateFromHomeButtonMinWidth: Dp = 280.dp
+    val navigateFromHomeButtonMaxWidth: Dp = 560.dp
 
     val buttonElevation: Dp = 1.dp
 

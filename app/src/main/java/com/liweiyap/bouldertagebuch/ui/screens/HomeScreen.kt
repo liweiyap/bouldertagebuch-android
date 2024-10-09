@@ -71,6 +71,7 @@ fun HomeScreen(
         onRequestGymSelectDialog = { doShowGymSelectDialog = true },
         onRequestDifficultySelectDialog = { doShowDifficultySelectDialog = true },
         onRequestNavigateToHistory = appNavHostController::navigateToHistory,
+        onRequestNavigateToGymCreate = appNavHostController::navigateToGymCreate,
     )
 
     if (doShowGymSelectDialog) {
@@ -97,6 +98,7 @@ private fun HomeScreen(
     onRequestGymSelectDialog: () -> Unit = {},
     onRequestDifficultySelectDialog: () -> Unit = {},
     onRequestNavigateToHistory: () -> Unit = {},
+    onRequestNavigateToGymCreate: () -> Unit = {},
 ) {
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -132,9 +134,17 @@ private fun HomeScreen(
                     onRequestDifficultySelectDialog = onRequestDifficultySelectDialog,
                 )
 
-                NavigateToHistoryButton(
+                NavigateButton(
+                    text = stringResource(id = R.string.button_navigate_history),
                     onRequestNavigation = onRequestNavigateToHistory,
                 )
+
+                if (userDefinedGym == null) {
+                    NavigateButton(
+                        text = stringResource(id = R.string.button_navigate_gym_create),
+                        onRequestNavigation = onRequestNavigateToGymCreate,
+                    )
+                }
             }
         }
     }
@@ -187,7 +197,7 @@ private fun BubbleTodayRouteCount(
             Spacer(modifier = Modifier.weight(1F))
 
             BubbleTodayRouteCountButton(
-                text = stringResource(id = R.string.button_route_count_add),
+                text = stringResource(id = R.string.button_add),
             ) {
                 if (todayRouteCount.sum() == 0) {
                     onRequestGymSelectDialog()
@@ -200,7 +210,7 @@ private fun BubbleTodayRouteCount(
             Spacer(modifier = Modifier.width(AppDimensions.todayRouteCountButtonMargin))
 
             BubbleTodayRouteCountButton(
-                text = stringResource(id = R.string.button_route_count_remove),
+                text = stringResource(id = R.string.button_remove),
                 isEnabled = (todayRouteCount.sum() > 0),
             ) {
                 onRequestDifficultySelectDialog()
@@ -233,16 +243,17 @@ private fun BubbleTodayRouteCountButton(
 }
 
 @Composable
-private fun NavigateToHistoryButton(
+private fun NavigateButton(
+    text: String,
     onRequestNavigation: () -> Unit = {},
 ) {
     AppTextButton(
         modifier = Modifier
             .widthIn(
-                min = AppDimensions.navigateToHistoryButtonMinWidth,
-                max = AppDimensions.navigateToHistoryButtonMaxWidth,
+                min = AppDimensions.navigateFromHomeButtonMinWidth,
+                max = AppDimensions.navigateFromHomeButtonMaxWidth,
             ),
-        text = stringResource(id = R.string.button_navigate_history),
+        text = text,
         textStyle = MaterialTheme.typography.bodyMedium,
         maxLines = 2,
         overflow = TextOverflow.Ellipsis,

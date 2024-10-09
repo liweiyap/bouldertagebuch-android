@@ -70,3 +70,23 @@ val gymVels: Gym = Gym(
         Difficulty(level = 6, colorName = "white"),
     ),
 )
+
+val gymNewComplete: Gym = Gym(
+    id = GymId.USERDEFINED0,
+    name = "Boulderclub, Graz",
+    difficulties = persistentListOf(
+        Difficulty(level = 0, colorName = "yellow", grade = "1 - 2"),
+        Difficulty(level = 1, colorName = "green", grade = "3 - 4b"),
+        Difficulty(level = 2, colorName = "blue", grade = "4b - 5c"),
+        Difficulty(level = 3, colorName = "pink", grade = "5c - 6b"),
+        Difficulty(level = 4, colorName = "red", grade = "6b - 7a"),
+        Difficulty(level = 5, colorName = "white", grade = "7a - 7b+"),
+        Difficulty(level = 6, colorName = "black", grade = "7c and up"),
+    ),
+)
+
+val gymNewIncomplete: Gym = Gym(
+    id = GymId.USERDEFINED0,
+    name = "Boulderclub, Graz",
+    difficulties = persistentListOf(),
+)

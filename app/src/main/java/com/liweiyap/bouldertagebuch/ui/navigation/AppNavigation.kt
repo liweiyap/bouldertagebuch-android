@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.liweiyap.bouldertagebuch.ui.MainViewModel
+import com.liweiyap.bouldertagebuch.ui.screens.GymCreateScreen
 import com.liweiyap.bouldertagebuch.ui.screens.HistoryScreen
 import com.liweiyap.bouldertagebuch.ui.screens.HomeScreen
 
@@ -27,6 +28,10 @@ fun AppNavigation() {
         composable(route = NavDestinationScreen.History.route) {
             HistoryScreen(hiltViewModel<MainViewModel>())
         }
+
+        composable(route = NavDestinationScreen.GymCreate.route) {
+            GymCreateScreen(hiltViewModel<MainViewModel>())
+        }
     }
 }
 
@@ -43,6 +48,12 @@ class AppNavHostController(
 ) {
     fun navigateToHistory() {
         navController.navigate(route = NavDestinationScreen.History.route) {
+            launchSingleTop = true
+        }
+    }
+
+    fun navigateToGymCreate() {
+        navController.navigate(route = NavDestinationScreen.GymCreate.route) {
             launchSingleTop = true
         }
     }

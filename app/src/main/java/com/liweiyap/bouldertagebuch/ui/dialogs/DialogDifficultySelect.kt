@@ -311,7 +311,7 @@ private fun DialogDifficultySelectRouteCountEditor(
     onRouteCountDecreased: (Int) -> Unit,
 ) {
     DialogDifficultySelectRouteCountButton(
-        text = stringResource(id = R.string.button_route_count_add),
+        text = stringResource(id = R.string.button_add),
     ) {
         onRouteCountIncreased(index)
     }
@@ -327,7 +327,7 @@ private fun DialogDifficultySelectRouteCountEditor(
     )
 
     DialogDifficultySelectRouteCountButton(
-        text = stringResource(id = R.string.button_route_count_remove),
+        text = stringResource(id = R.string.button_remove),
         isEnabled = (todayRouteCount[index] > 0),
     ) {
         onRouteCountDecreased(index)
