@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.BoulderingLog" parent="Theme.MaterialComponents.NoActionBar" />
+    <style name="Theme.BoulderingLog" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="colorPrimary">#FFFADF55</item>
+    </style>
 </resources>
