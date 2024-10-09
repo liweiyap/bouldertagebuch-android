@@ -2,7 +2,7 @@
 
 <img src="https://img.shields.io/badge/Android-7%2B-green?style=for-the-badge&logo=android">&emsp;<img src="https://img.shields.io/badge/release-v1.0-fadf55?style=for-the-badge">
 
-Native Android app for logging personal bouldering training sessions. Written in Kotlin with Jetpack Compose, Hilt, and coroutines in MVVM architecture.
+Native Android app for logging personal bouldering training sessions. Written in Kotlin with Jetpack Compose, Hilt, and coroutines in MVVM architecture. Available in English and German.
 
 <table>
     <tbody>
