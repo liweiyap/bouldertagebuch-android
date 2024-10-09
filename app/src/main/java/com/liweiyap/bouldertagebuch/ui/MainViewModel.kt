@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.liweiyap.bouldertagebuch.model.Gym
 import com.liweiyap.bouldertagebuch.model.GymId
 import com.liweiyap.bouldertagebuch.model.MainRepository
+import com.liweiyap.bouldertagebuch.model.PaginatedLog
 import com.liweiyap.bouldertagebuch.utils.getDate
 import com.liweiyap.bouldertagebuch.utils.mutableStateIn
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,7 +28,7 @@ class MainViewModel @Inject constructor(
     private val _todayRouteCount: MutableStateFlow<List<Int>> = repo.getTodayRouteCount().mutableStateIn(scope = viewModelScope, initialValue = listOf())
     val todayRouteCount = _todayRouteCount.asStateFlow()
 
-    private val _paginatedLog: MutableStateFlow<Map<LocalDate, Pair<GymId, List<Int>>>> = repo.getPaginatedLog().mutableStateIn(scope = viewModelScope, initialValue = mapOf())
+    private val _paginatedLog: MutableStateFlow<PaginatedLog> = repo.getPaginatedLog().mutableStateIn(scope = viewModelScope, initialValue = PaginatedLog(mapOf()))
     val paginatedLog = _paginatedLog.asStateFlow()
 
     private val _years: MutableStateFlow<List<Int>> = repo.getYears().mutableStateIn(scope = viewModelScope, initialValue = listOf())

@@ -25,6 +25,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import com.liweiyap.bouldertagebuch.R
 import com.liweiyap.bouldertagebuch.model.Gym
 import com.liweiyap.bouldertagebuch.model.GymId
+import com.liweiyap.bouldertagebuch.model.PaginatedLog
 import com.liweiyap.bouldertagebuch.model.gymRockerei
 import com.liweiyap.bouldertagebuch.model.gymVels
 import com.liweiyap.bouldertagebuch.services.SystemBroadcastReceiver
@@ -36,14 +37,14 @@ import com.liweiyap.bouldertagebuch.ui.components.LifecycleOwner
 import com.liweiyap.bouldertagebuch.ui.components.Spinner
 import com.liweiyap.bouldertagebuch.ui.components.verticalScrollWithScrollbar
 import com.liweiyap.bouldertagebuch.ui.theme.AppDimensions
+import com.liweiyap.bouldertagebuch.utils.ImmutableLocalDate
+import com.liweiyap.bouldertagebuch.utils.ImmutableLocalDateJava
 import com.liweiyap.bouldertagebuch.utils.getDate
 import com.liweiyap.bouldertagebuch.utils.short
 import com.liweiyap.bouldertagebuch.utils.toJava
 import com.liweiyap.bouldertagebuch.utils.toKotlin
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.minus
@@ -64,7 +65,7 @@ fun HistoryScreen(
     HistoryScreen(
         years = viewModel.years.collectAsState().value.toImmutableList(),
         viewedYear = viewModel.viewedYear.collectAsState().value,
-        paginatedLog = viewModel.paginatedLog.collectAsState().value.toImmutableMap(),
+        paginatedLog = viewModel.paginatedLog.collectAsState().value,
         viewedHighlightedGymId = viewModel.viewedHighlightedGymId.collectAsState().value,
         userDefinedGym = viewModel.userDefinedGym.collectAsState().value,
         onYearSelected = viewModel::setViewedYear,
@@ -76,7 +77,7 @@ fun HistoryScreen(
 private fun HistoryScreen(
     years: ImmutableList<Int>,
     viewedYear: Int,
-    paginatedLog: ImmutableMap<LocalDate, Pair<GymId, List<Int>>>,
+    paginatedLog: PaginatedLog,
     viewedHighlightedGymId: GymId,
     userDefinedGym: Gym? = null,
     onYearSelected: (Int) -> Unit,
@@ -139,8 +140,8 @@ private fun HistoryScreen(
 
                 HistoryHeatMapCalendar(
                     paginatedLog = paginatedLog,
-                    startDate = startDate,
-                    endDate = endDate,
+                    startDate = ImmutableLocalDate(startDate),
+                    endDate = ImmutableLocalDate(endDate),
                     onDateSelected = { date ->
                         selectedDate = date.toJava()
                     },
@@ -150,7 +151,7 @@ private fun HistoryScreen(
                     BubbleSelectedDayRouteCount(
                         paginatedLog = paginatedLog,
                         userDefinedGym = userDefinedGym,
-                        selectedDate = it,
+                        selectedDate = ImmutableLocalDateJava(it),
                     )
                 }
 
@@ -167,13 +168,13 @@ private fun HistoryScreen(
 
 @Composable
 private fun BubbleSelectedDayRouteCount(
-    paginatedLog: ImmutableMap<LocalDate, Pair<GymId, List<Int>>>,
+    paginatedLog: PaginatedLog,
     userDefinedGym: Gym? = null,
-    selectedDate: java.time.LocalDate,
+    selectedDate: ImmutableLocalDateJava,
 ) {
     BubbleLayout {
         Text(
-            text = "${selectedDate.dayOfMonth}. ${selectedDate.month.short(LocalContext.current)} ${selectedDate.year}",
+            text = "${selectedDate.value.dayOfMonth}. ${selectedDate.value.month.short(LocalContext.current)} ${selectedDate.value.year}",
             style = MaterialTheme.typography.titleMedium,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
@@ -189,7 +190,7 @@ private fun BubbleSelectedDayRouteCount(
 
 @Composable
 private fun BubbleYearlyHighlight(
-    paginatedLog: ImmutableMap<LocalDate, Pair<GymId, List<Int>>>,
+    paginatedLog: PaginatedLog,
     viewedHighlightedGymId: GymId,
     userDefinedGym: Gym? = null,
     onHighlightedGymSelected: (GymId) -> Unit,
@@ -234,7 +235,7 @@ private fun BubbleYearlyHighlight(
                 BubbleDayContent(
                     paginatedLog = paginatedLog,
                     userDefinedGym = userDefinedGym,
-                    selectedDate = highlightedDate,
+                    selectedDate = ImmutableLocalDateJava(highlightedDate),
                 )
             }
         }
@@ -243,11 +244,11 @@ private fun BubbleYearlyHighlight(
 
 @Composable
 private fun BubbleDayContent(
-    paginatedLog: Map<LocalDate, Pair<GymId, List<Int>>>,
+    paginatedLog: PaginatedLog,
     userDefinedGym: Gym? = null,
-    selectedDate: java.time.LocalDate,
+    selectedDate: ImmutableLocalDateJava,
 ) {
-    val selectedDateEntry: Pair<GymId, List<Int>>? = paginatedLog[selectedDate.toKotlin()]
+    val selectedDateEntry: Pair<GymId, List<Int>>? = paginatedLog.entries[selectedDate.value.toKotlin()]
     if (selectedDateEntry == null) {
         Text(
             text = stringResource(id = R.string.bubble_selected_heatmap_entry_blank),
@@ -295,7 +296,7 @@ private fun BubbleDayContent(
 }
 
 fun getHighlightedDateByGym(
-    paginatedLog: Map<LocalDate, Pair<GymId, List<Int>>>,
+    paginatedLog: PaginatedLog,
     viewedHighlightedGymId: GymId,
 ): java.time.LocalDate? {
     var highlightedDate: LocalDate? = null
@@ -303,6 +304,7 @@ fun getHighlightedDateByGym(
     var highlightedDifficultyIdx = 0
 
     paginatedLog
+        .entries
         .filterValues { entry -> entry.first == viewedHighlightedGymId }
         .forEach { entry ->
             val maxIdx: Int = entry.value.second.indexOfLast { count ->

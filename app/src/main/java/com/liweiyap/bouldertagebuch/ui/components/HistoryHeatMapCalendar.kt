@@ -3,6 +3,7 @@
 
 package com.liweiyap.bouldertagebuch.ui.components
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -40,8 +41,10 @@ import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.liweiyap.bouldertagebuch.R
 import com.liweiyap.bouldertagebuch.model.GymId
+import com.liweiyap.bouldertagebuch.model.PaginatedLog
 import com.liweiyap.bouldertagebuch.ui.theme.AppColor
 import com.liweiyap.bouldertagebuch.ui.theme.AppDimensions
+import com.liweiyap.bouldertagebuch.utils.ImmutableLocalDate
 import com.liweiyap.bouldertagebuch.utils.short
 import com.liweiyap.bouldertagebuch.utils.toKotlin
 import com.liweiyap.bouldertagebuch.utils.yearMonthToJava
@@ -61,14 +64,14 @@ enum class HistoryHeatMapQuartile {
 }
 
 private fun mapRouteCountToHeat(
-    log: Map<LocalDate, Pair<GymId, List<Int>>>,
+    log: PaginatedLog,
 ): Map<LocalDate, HistoryHeatMapQuartile> {
-    val maxDailyRouteCountEntry: Map.Entry<LocalDate, Pair<GymId, List<Int>>> = log.maxByOrNull { entry ->
+    val maxDailyRouteCountEntry: Map.Entry<LocalDate, Pair<GymId, List<Int>>> = log.entries.maxByOrNull { entry ->
         entry.value.second.sum()
     } ?: return emptyMap()
 
     val maxDailyRouteCount: Int = maxDailyRouteCountEntry.value.second.sum()
-    return log.mapValues { entry ->
+    return log.entries.mapValues { entry ->
         val dailyRouteCount: Int = entry.value.second.sum()
         val dailyRouteCountPercentile: Float = dailyRouteCount.toFloat() / maxDailyRouteCount
 
@@ -92,9 +95,9 @@ private fun mapRouteCountToHeat(
 
 @Composable
 fun HistoryHeatMapCalendar(
-    paginatedLog: Map<LocalDate, Pair<GymId, List<Int>>>,
-    startDate: LocalDate,
-    endDate: LocalDate,
+    paginatedLog: PaginatedLog,
+    startDate: ImmutableLocalDate,
+    endDate: ImmutableLocalDate,
     onDateSelected: (LocalDate) -> Unit,
 ) {
     Column {
@@ -102,9 +105,9 @@ fun HistoryHeatMapCalendar(
 
         val heatMapCalendarState = rememberSaveable(startDate, endDate, saver = HeatMapCalendarState.Saver) {
             HeatMapCalendarState(
-                startMonth = startDate.yearMonthToJava(),
-                endMonth = endDate.yearMonthToJava(),
-                firstVisibleMonth = endDate.yearMonthToJava(),
+                startMonth = startDate.value.yearMonthToJava(),
+                endMonth = endDate.value.yearMonthToJava(),
+                firstVisibleMonth = endDate.value.yearMonthToJava(),
                 firstDayOfWeek = firstDayOfWeekFromLocale(),
                 visibleItemState = null,
             )
@@ -118,10 +121,10 @@ fun HistoryHeatMapCalendar(
                 val currentDate: LocalDate = calendarDay.date.toKotlin()
 
                 HistoryHeatMapCalendarDay(
-                    currentDate = currentDate,
+                    currentDate = ImmutableLocalDate(currentDate),
                     heatMapWeek = heatMapWeek,
-                    startDate = startDate,
-                    endDate = endDate,
+                    startDate = ImmutableLocalDate(startDate.value),
+                    endDate = ImmutableLocalDate(endDate.value),
                     quartile = heatLog[currentDate] ?: HistoryHeatMapQuartile.NONE,
                     onClick = onDateSelected,
                 )
@@ -148,10 +151,10 @@ fun HistoryHeatMapCalendar(
 
 @Composable
 private fun HistoryHeatMapCalendarDay(
-    currentDate: LocalDate,
+    currentDate: ImmutableLocalDate,
     heatMapWeek: HeatMapWeek,
-    startDate: LocalDate,
-    endDate: LocalDate,
+    startDate: ImmutableLocalDate,
+    endDate: ImmutableLocalDate,
     quartile: HistoryHeatMapQuartile,
     onClick: (LocalDate) -> Unit,
 ) {
@@ -163,14 +166,14 @@ private fun HistoryHeatMapCalendarDay(
     // so the items are laid out properly as the column is top to bottom.
     val weekDates: List<LocalDate> = heatMapWeek.days.map { it.date.toKotlin() }
 
-    if (currentDate in startDate .. endDate) {
+    if (currentDate.value in startDate.value .. endDate.value) {
         HistoryHeatMapQuartileColoredCell(
             color = quartile.getColor(isSystemInDarkTheme()),
         ) {
-            onClick(currentDate)
+            onClick(currentDate.value)
         }
     }
-    else if (weekDates.contains(startDate)) {
+    else if (weekDates.contains(startDate.value)) {
         HistoryHeatMapQuartileColoredCell(
             color = Color.Transparent,
         )
@@ -245,7 +248,7 @@ private fun HistoryHeatMapCalendarWeekHeader(
 @Composable
 private fun HistoryHeatMapCalendarMonthHeader(
     calendarMonth: CalendarMonth,
-    endDate: LocalDate,
+    endDate: ImmutableLocalDate,
     state: HeatMapCalendarState,
 ) {
     val density: Density = LocalDensity.current
@@ -253,7 +256,7 @@ private fun HistoryHeatMapCalendarMonthHeader(
         derivedStateOf { getFirstMonthOutOfBounds(state.layoutInfo, density) }
     }
 
-    if (calendarMonth.weekDays.first().first().date.toKotlin() <= endDate) {
+    if (calendarMonth.weekDays.first().first().date.toKotlin() <= endDate.value) {
         val yearMonth: java.time.YearMonth = calendarMonth.yearMonth
 
         val titleBuilder = StringBuilder()

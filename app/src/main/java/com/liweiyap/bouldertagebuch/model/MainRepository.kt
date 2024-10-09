@@ -87,11 +87,11 @@ class MainRepository @Inject constructor(
         }
     }
 
-    fun getPaginatedLog(): Flow<Map<LocalDate, Pair<GymId, List<Int>>>> {
+    fun getPaginatedLog(): Flow<PaginatedLog> {
         return context.dataStore.data.map { userPrefs: UserPreferences ->
-            userPrefs.log.filter {
+            PaginatedLog(userPrefs.log.filter {
                 it.key.year == userPrefs.viewedYear
-            }
+            })
         }
     }
 

@@ -2,12 +2,19 @@ package com.liweiyap.bouldertagebuch.utils
 
 import android.content.Context
 import android.content.res.Resources
+import androidx.compose.runtime.Immutable
 import com.liweiyap.bouldertagebuch.R
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.todayIn
+
+@Immutable
+class ImmutableLocalDate(val value: LocalDate)
+
+@Immutable
+class ImmutableLocalDateJava(val value: java.time.LocalDate)
 
 fun getDate(): LocalDate {
     return Clock.System.todayIn(TimeZone.currentSystemDefault())

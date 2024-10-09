@@ -1,6 +1,7 @@
 package com.liweiyap.bouldertagebuch
 
 import com.liweiyap.bouldertagebuch.model.GymId
+import com.liweiyap.bouldertagebuch.model.PaginatedLog
 import com.liweiyap.bouldertagebuch.ui.screens.getHighlightedDateByGym
 import com.liweiyap.bouldertagebuch.utils.toKotlin
 import kotlinx.datetime.LocalDate
@@ -50,40 +51,40 @@ class TestHighlightedDate {
         Assert.assertNull(getHighlightedDateByGym(map6, GymId.VELS))
     }
 
-    private val map0: Map<LocalDate, Pair<GymId, List<Int>>> = mapOf(
+    private val map0: PaginatedLog = PaginatedLog(mapOf(
         LocalDate(year = 2024, monthNumber = 1, dayOfMonth = 1) to Pair(GymId.ROCKEREI, listOf(0, 1, 12, 0, 0, 0, 0, 0)),
         LocalDate(year = 2024, monthNumber = 2, dayOfMonth = 2) to Pair(GymId.ROCKEREI, listOf(0, 3, 5, 1, 0, 0, 0, 0)),
-    )
+    ))
 
-    private val map1: Map<LocalDate, Pair<GymId, List<Int>>> = mapOf(
+    private val map1: PaginatedLog = PaginatedLog(mapOf(
         LocalDate(year = 2024, monthNumber = 1, dayOfMonth = 1) to Pair(GymId.ROCKEREI, listOf(0, 3, 5, 1, 0, 0, 0, 0)),
         LocalDate(year = 2024, monthNumber = 2, dayOfMonth = 2) to Pair(GymId.ROCKEREI, listOf(0, 1, 12, 0, 0, 0, 0, 0)),
-    )
+    ))
 
-    private val map2: Map<LocalDate, Pair<GymId, List<Int>>> = mapOf(
+    private val map2: PaginatedLog = PaginatedLog(mapOf(
         LocalDate(year = 2024, monthNumber = 1, dayOfMonth = 1) to Pair(GymId.ROCKEREI, listOf(0, 1, 12, 0, 0, 0, 0, 0)),
         LocalDate(year = 2024, monthNumber = 2, dayOfMonth = 2) to Pair(GymId.ROCKEREI, listOf(0, 3, 5, 1, 0, 0, 0, 0)),
         LocalDate(year = 2024, monthNumber = 3, dayOfMonth = 3) to Pair(GymId.ROCKEREI, listOf(0, 1, 12, 2, 0, 0, 0, 0)),
-    )
+    ))
 
-    private val map3: Map<LocalDate, Pair<GymId, List<Int>>> = emptyMap()
+    private val map3: PaginatedLog = PaginatedLog(emptyMap())
 
-    private val map4: Map<LocalDate, Pair<GymId, List<Int>>> = mapOf(
+    private val map4: PaginatedLog = PaginatedLog(mapOf(
         LocalDate(year = 2024, monthNumber = 1, dayOfMonth = 1) to Pair(GymId.ROCKEREI, listOf(0, 1, 12, 0, 0, 0, 0, 0)),
         LocalDate(year = 2024, monthNumber = 2, dayOfMonth = 2) to Pair(GymId.ROCKEREI, listOf(0, 1, 12, 2, 0, 0, 0, 0)),
         LocalDate(year = 2024, monthNumber = 3, dayOfMonth = 3) to Pair(GymId.ROCKEREI, listOf(0, 3, 5, 1, 0, 0, 0, 0)),
-    )
+    ))
 
-    private val map5: Map<LocalDate, Pair<GymId, List<Int>>> = mapOf(
+    private val map5: PaginatedLog = PaginatedLog(mapOf(
         LocalDate(year = 2024, monthNumber = 1, dayOfMonth = 1) to Pair(GymId.ROCKEREI, listOf(0, 1, 12, 0, 0, 0, 0, 0)),
         LocalDate(year = 2024, monthNumber = 2, dayOfMonth = 2) to Pair(GymId.ROCKEREI, listOf(0, 1, 12, 2, 0, 0, 0, 0)),
         LocalDate(year = 2024, monthNumber = 3, dayOfMonth = 3) to Pair(GymId.ROCKEREI, listOf(0, 3, 5, 1, 0, 0, 0, 0)),
         LocalDate(year = 2024, monthNumber = 3, dayOfMonth = 3) to Pair(GymId.ROCKEREI, listOf(14, 0, 0, 0, 0, 0, 0, 0)),
-    )
+    ))
 
-    private val map6: Map<LocalDate, Pair<GymId, List<Int>>> = mapOf(
+    private val map6: PaginatedLog = PaginatedLog(mapOf(
         LocalDate(year = 2024, monthNumber = 1, dayOfMonth = 1) to Pair(GymId.ROCKEREI, listOf(0, 0, 0, 0, 0, 0, 0, 0)),
         LocalDate(year = 2024, monthNumber = 2, dayOfMonth = 2) to Pair(GymId.ROCKEREI, listOf(0, 0, 0, 0, 0, 0, 0, 0)),
         LocalDate(year = 2024, monthNumber = 3, dayOfMonth = 3) to Pair(GymId.ROCKEREI, listOf(0, 0, 0, 0, 0, 0, 0, 0)),
-    )
+    ))
 }
