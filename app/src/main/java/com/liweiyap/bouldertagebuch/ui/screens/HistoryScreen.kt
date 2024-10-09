@@ -37,7 +37,6 @@ import com.liweiyap.bouldertagebuch.ui.components.LifecycleOwner
 import com.liweiyap.bouldertagebuch.ui.components.Spinner
 import com.liweiyap.bouldertagebuch.ui.components.verticalScrollWithScrollbar
 import com.liweiyap.bouldertagebuch.ui.theme.AppDimensions
-import com.liweiyap.bouldertagebuch.utils.ImmutableLocalDate
 import com.liweiyap.bouldertagebuch.utils.ImmutableLocalDateJava
 import com.liweiyap.bouldertagebuch.utils.getDate
 import com.liweiyap.bouldertagebuch.utils.short
@@ -140,8 +139,8 @@ private fun HistoryScreen(
 
                 HistoryHeatMapCalendar(
                     paginatedLog = paginatedLog,
-                    startDate = ImmutableLocalDate(startDate),
-                    endDate = ImmutableLocalDate(endDate),
+                    startDate = startDate,
+                    endDate = endDate,
                     onDateSelected = { date ->
                         selectedDate = date.toJava()
                     },

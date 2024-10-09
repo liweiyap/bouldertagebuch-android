@@ -10,6 +10,7 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.todayIn
 
+// not used at the moment because it breaks calendar scrolling? upgrade dep. in future to see if bug still exists
 @Immutable
 class ImmutableLocalDate(val value: LocalDate)
 
