@@ -347,9 +347,8 @@ private fun DialogDifficultySelectRouteCountButton(
         text = text,
         textStyle = MaterialTheme.typography.bodyMedium,
         isEnabled = isEnabled,
-    ) {
-        onClick()
-    }
+        onClick = onClick,
+    )
 }
 
 fun canCalculateLevelOffsets(

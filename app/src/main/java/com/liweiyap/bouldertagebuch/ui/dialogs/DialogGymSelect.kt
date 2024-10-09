@@ -99,9 +99,8 @@ private fun DialogGymSelectButton(
         maxLines = 2,
         overflow = TextOverflow.Ellipsis,
         shape = MaterialTheme.shapes.medium,
-    ) {
-        onGymSelected()
-    }
+        onClick = onGymSelected,
+    )
 }
 
 @Preview(name = "Light Mode", showBackground = true)

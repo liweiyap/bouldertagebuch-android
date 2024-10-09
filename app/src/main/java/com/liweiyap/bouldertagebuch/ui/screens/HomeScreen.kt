@@ -188,25 +188,26 @@ private fun BubbleTodayRouteCount(
 
             Spacer(modifier = Modifier.weight(1F))
 
-            BubbleTodayRouteCountButton(
-                text = stringResource(id = R.string.button_route_count_add),
-            ) {
+            val addAction: () -> Unit = remember(todayRouteCount) {
                 if (todayRouteCount.sum() == 0) {
-                    onRequestGymSelectDialog()
+                    onRequestGymSelectDialog
                 }
                 else {
-                    onRequestDifficultySelectDialog()
+                    onRequestDifficultySelectDialog
                 }
             }
+            BubbleTodayRouteCountButton(
+                text = stringResource(id = R.string.button_route_count_add),
+                onClick = addAction,
+            )
 
             Spacer(modifier = Modifier.width(AppDimensions.todayRouteCountButtonMargin))
 
             BubbleTodayRouteCountButton(
                 text = stringResource(id = R.string.button_route_count_remove),
                 isEnabled = (todayRouteCount.sum() > 0),
-            ) {
-                onRequestDifficultySelectDialog()
-            }
+                onClick = onRequestDifficultySelectDialog,
+            )
         }
 
         if ((todayGym != null) && (todayRouteCount.sum() > 0)) {
@@ -229,9 +230,8 @@ private fun BubbleTodayRouteCountButton(
         text = text,
         textStyle = MaterialTheme.typography.bodyMedium,
         isEnabled = isEnabled,
-    ) {
-        onClick()
-    }
+        onClick = onClick,
+    )
 }
 
 @Composable
@@ -249,9 +249,8 @@ private fun NavigateToHistoryButton(
         maxLines = 2,
         overflow = TextOverflow.Ellipsis,
         shape = MaterialTheme.shapes.medium,
-    ) {
-        onRequestNavigation()
-    }
+        onClick = onRequestNavigation,
+    )
 }
 
 @Preview(name = "Light Mode")
