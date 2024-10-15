@@ -25,3 +25,9 @@ Designed and developed by [Li-Wei Yap](https://liweiyap.github.io/). The code wi
 The heat-map calendar comes from an [open-source library](https://github.com/kizitonwose/Calendar) developed by Kizito Nwose.
 
 The app icon was taken from www.flaticon.com and designed by [Freepik](https://www.freepik.com/).
+
+<br/>
+<div align="center">
+    <img src="https://forthebadge.com/images/badges/built-with-love.svg" />
+    <img src="https://forthebadge.com/images/badges/built-by-developers.svg" />
+</div>
