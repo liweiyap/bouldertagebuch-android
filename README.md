@@ -29,5 +29,6 @@ The app icon was taken from www.flaticon.com and designed by [Freepik](https://w
 <br/>
 <div align="center">
     <img src="https://forthebadge.com/images/badges/built-with-love.svg" />
+    &ensp;
     <img src="https://forthebadge.com/images/badges/built-by-developers.svg" />
 </div>
